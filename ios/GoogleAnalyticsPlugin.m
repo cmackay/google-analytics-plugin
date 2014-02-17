@@ -27,14 +27,16 @@
 - (void) setTrackingId: (CDVInvokedUrlCommand*)command
 {
   CDVPluginResult* result = nil;
-	NSString* trackingId = [command.arguments objectAtIndex:0];
+  NSString* trackingId = [command.arguments objectAtIndex:0];
 
-	[GAI sharedInstance].dispatchInterval = 10;
+  [GAI sharedInstance].dispatchInterval = 10;
   [GAI sharedInstance].trackUncaughtExceptions = YES;
   [[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
+
   if (tracker) {
     [[GAI sharedInstance] removeTrackerByName:[tracker name]];
   }
+
   tracker = [[GAI sharedInstance] trackerWithTrackingId:trackingId];
   result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 
