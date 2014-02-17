@@ -7,6 +7,13 @@ Provides Apache Cordova support for Google Analytics v3 (Universal Analytics) us
 
 Rather than implementing specific methods for tracking screen views and events, this plugin provides the more generic send/set methods.
 
+## Installation
+```
+cordova plugin add https://github.com/cmackay/google-analytics-plugin.git
+```
+
+## Usage
+
 ```js
 
 // API
