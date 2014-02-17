@@ -1,7 +1,7 @@
 google-analytics-plugin
 =======================
 
-Cordova Google Analytics Plugin v3 for Android &amp; iOS
+Cordova Google Analytics v3 Plugin for Android &amp; iOS
 
 Provides Apache Cordova support for Google Analytics v3 (Universal Analytics) using the native sdks for Android &ampl iOS.
 
@@ -10,11 +10,26 @@ Rather than implementing specific methods for tracking screen views and events, 
 ```js
 
 // API
+// =====================
+
+// sets the tracking id (must be called first)
 analytics.setTrackingId(trackingId, successCallback, errorCallback);
+
+// sets a name and a value, to unset a value pass a null value
 analytics.set(name, value, successCallback, errorCallback);
-analytics.get(name, successCallback, errorCallback); // value is passed to successCallback
-analytics.send(object, successCallback, errorCallback);
+
+// gets the current value for the specified name
+analytics.get(name, successCallback, errorCallback);
+
+// sends the params object (key names should be from Fields)
+analytics.send(params, successCallback, errorCallback);
+
+// closes the current tracker
 analytics.close(successCallback, errorCallback);
+
+
+// EXAMPLE USAGE
+// =====================
 
 // basic example using send function
 var Fields = analytics.Fields;
