@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  id="com.cmackay.plugins.googleanalytics"
+  version="0.1.0">
+
+  <engines>
+    <engine name="cordova" version=">=3.0.0" />
+  </engines>
+
+  <name>GoogleAnalytics</name>
+  <description>Plugin for Google Analytics SDK 3.0</description>
+  <author>Craig MacKay</author>
+  <license>Apache 2.0</license>
+
+  <js-module src="www/analytics.js" name="GoogleAnalytics">
+    <clobbers target="analytics" />
+  </js-module>
+
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="GoogleAnalytics">
+        <param name="ios-package" value="GoogleAnalyticsPlugin" />
+      </feature>
+    </config-file>
+
+    <header-file src="ios/GAI.h" />
+    <header-file src="ios/GAIDictionaryBuilder.h" />
+    <header-file src="ios/GAIFields.h" />
+    <header-file src="ios/GAILogger.h" />
+    <header-file src="ios/GAITrackedViewController.h" />
+    <header-file src="ios/GAITracker.h" />
+    <source-file src="ios/libGoogleAnalyticsServices.a" framework="true" />
+    <header-file src="ios/GoogleAnalyticsPlugin.h" />
+    <source-file src="ios/GoogleAnalyticsPlugin.m" />
+
+    <framework src="SystemConfiguration.framework" />
+    <framework src="CoreData.framework" />
+    <framework src="AdSupport.framework" />
+    <framework src="libz.dylib" />
+  </platform>
+
+  <platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="GoogleAnalytics">
+        <param name="android-package" value="com.cmackay.plugins.googleanalytics.GoogleAnalyticsPlugin" />
+      </feature>
+    </config-file>
+
+    <config-file target="AndroidManifest.xml" parent="/*">
+      <uses-permission android:name="android.permission.INTERNET" />
+      <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    </config-file>
+
+    <source-file src="android/GoogleAnalyticsPlugin.java" target-dir="src/com/cmackay/plugins/googleanalytics" />
+    <source-file src="android/libGoogleAnalyticsServices.jar" target-dir="libs" />
+  </platform>
+
+</plugin>
