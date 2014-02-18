@@ -149,7 +149,7 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
 
   private void assertTracker() {
     if (tracker == null) {
-      throw new IllegalStateException("Tracker not initialized. Call setTrackerId prior to using tracker.");
+      throw new IllegalStateException("Tracker not initialized. Call setTrackingId prior to using tracker.");
     }
   }
 
