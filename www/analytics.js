@@ -101,22 +101,22 @@ Analytics.prototype = {
   },
 
   setTrackingId: function (trackingId, success, error) {
-    argscheck.checkArgs('sFF', 'Analytics.setTrackingId', arguments);
+    argscheck.checkArgs('sFF', 'GoogleAnalytics.setTrackingId', arguments);
     exec(success, error, 'GoogleAnalytics', 'setTrackingId', [trackingId]);
   },
 
   get: function (key, success, error) {
-    argscheck.checkArgs('sFF', 'Analytics.get', arguments);
+    argscheck.checkArgs('sFF', 'GoogleAnalytics.get', arguments);
     exec(success, error, 'GoogleAnalytics', 'get', [key]);
   },
 
   set: function (key, value, success, error) {
-    argscheck.checkArgs('s*FF', 'Analytics.set', arguments);
+    argscheck.checkArgs('s*FF', 'GoogleAnalytics.set', arguments);
     exec(success, error, 'GoogleAnalytics', 'set', [key, value]);
   },
 
   send: function (map, success, error) {
-    argscheck.checkArgs('oFF', 'Analytics.send', arguments);
+    argscheck.checkArgs('oFF', 'GoogleAnalytics.send', arguments);
     exec(success, error, 'GoogleAnalytics', 'send', [map]);
   },
 
@@ -138,7 +138,7 @@ Analytics.prototype = {
   },
 
   close: function (success, error) {
-    argscheck.checkArgs('FF', 'Analytics.close', arguments);
+    argscheck.checkArgs('FF', 'GoogleAnalytics.close', arguments);
     exec(success, error, 'GoogleAnalytics', 'close', []);
   }
 
