@@ -128,6 +128,15 @@ Analytics.prototype = {
     this.send(params, success, error);
   },
 
+  sendException: function (description, fatal, success, error) {
+    var params = {};
+    params[this.Fields.HIT_TYPE]        = this.HitTypes.EXCEPTION;
+    params[this.Fields.EX_DESCRIPTION]  = description;
+    params[this.Fields.EX_FATAL]        = fatal ? 1 : 0;
+
+    this.send(params, success, error);
+  },
+
   close: function (success, error) {
     argscheck.checkArgs('FF', 'Analytics.close', arguments);
     exec(success, error, 'GoogleAnalytics', 'close', []);
