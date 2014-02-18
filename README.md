@@ -58,6 +58,6 @@ analytics.HitTypes
 
 ```
 
-Useful Links
+## Useful Links
 
 [Measurement Protocol Developer Guide](https://developers.google.com/analytics/devguides/collection/protocol/v1/devguide)
