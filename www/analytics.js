@@ -120,6 +120,11 @@ Analytics.prototype = {
     exec(success, error, 'GoogleAnalytics', 'send', [map]);
   },
 
+  close: function (success, error) {
+    argscheck.checkArgs('FF', 'GoogleAnalytics.close', arguments);
+    exec(success, error, 'GoogleAnalytics', 'close', []);
+  },
+
   sendAppView: function (screenName, success, error) {
     var params = {};
     params[this.Fields.HIT_TYPE]    = this.HitTypes.APP_VIEW;
@@ -135,11 +140,6 @@ Analytics.prototype = {
     params[this.Fields.EX_FATAL]        = fatal ? 1 : 0;
 
     this.send(params, success, error);
-  },
-
-  close: function (success, error) {
-    argscheck.checkArgs('FF', 'GoogleAnalytics.close', arguments);
-    exec(success, error, 'GoogleAnalytics', 'close', []);
   }
 
 };
