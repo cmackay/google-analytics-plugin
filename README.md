@@ -20,10 +20,9 @@ cordova plugin add https://github.com/cmackay/google-analytics-plugin.git
 var Fields = analytics.Fields;
 analytics.setTrackingId('UA-XXXXX-X', successCallback, errorCallback);
 
-var params = {
-  Fields.HIT_TYPE: 'appview',
-  Fields.SCREEN_NAME: 'home'
-};
+var params = {};
+params[Fields.HIT_TYPE] = 'appview';
+params[Fields.SCREEN_NAME] = 'home';
 
 analytics.send(params, successCallback, errorCallback);
 
