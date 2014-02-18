@@ -47,7 +47,7 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
   private static Tracker tracker;
   private static Thread.UncaughtExceptionHandler uncaughtExceptionHandler;
 
-  private static final int GA_DISPATCH_PERIOD = 30;
+  private static final int GA_DISPATCH_PERIOD = 10;
   private static final LogLevel GA_LOG_LEVEL = LogLevel.VERBOSE;
 
   private void initializeGa() {
