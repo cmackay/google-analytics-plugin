@@ -17,11 +17,14 @@ cordova plugin add https://github.com/cmackay/google-analytics-plugin.git
 ```js
 
 // basic example using send function
-var Fields = analytics.Fields;
+
+var Fields    = analytics.Fields,
+    HitTypes  = analytics.HitTypes;
+
 analytics.setTrackingId('UA-XXXXX-X', successCallback, errorCallback);
 
 var params = {};
-params[Fields.HIT_TYPE] = 'appview';
+params[Fields.HIT_TYPE] = HitTypes.APP_VIEW;
 params[Fields.SCREEN_NAME] = 'home';
 
 analytics.send(params, successCallback, errorCallback);
@@ -50,67 +53,7 @@ analytics.close(successCallback, errorCallback);
 // provides object containing field name mappings
 analytics.Fields
 
-```
-## Fields
-
-```js
-
-ANDROID_APP_UID: 'AppUID',
-ANONYMIZE_IP: '&aip',
-APP_ID: '&aid',
-APP_INSTALLER_ID: '&aiid',
-APP_NAME: '&an',
-APP_VERSION: '&av',
-CAMPAIGN_CONTENT: '&cc',
-CAMPAIGN_ID: '&ci',
-CAMPAIGN_KEYWORD: '&ck',
-CAMPAIGN_MEDIUM: '&cm',
-CAMPAIGN_NAME: '&cn',
-CAMPAIGN_SOURCE: '&cs',
-CLIENT_ID: '&cid',
-CURRENCY_CODE: '&cu',
-DESCRIPTION: '&cd',
-ENCODING: '&de',
-EVENT_ACTION: '&ea',
-EVENT_CATEGORY: '&ec',
-EVENT_LABEL: '&el',
-EVENT_VALUE: '&ev',
-EX_DESCRIPTION: '&exd',
-EX_FATAL: '&exf',
-FLASH_VERSION: '&fl',
-HIT_TYPE: '&t',
-HOSTNAME: '&dh',
-ITEM_CATEGORY: '&iv',
-ITEM_NAME: '&in',
-ITEM_PRICE: '&ip',
-ITEM_QUANTITY: '&iq',
-ITEM_SKU: '&ic',
-JAVA_ENABLED: '&je',
-LANGUAGE: '&ul',
-LOCATION: '&dl',
-NON_INTERACTION: '&ni',
-PAGE: '&dp',
-REFERRER: '&dr',
-SAMPLE_RATE: '&sf',
-SCREEN_COLORS: '&sd',
-SCREEN_NAME: '&cd',
-SCREEN_RESOLUTION: '&sr',
-SESSION_CONTROL: '&sc',
-SOCIAL_ACTION: '&sa',
-SOCIAL_NETWORK: '&sn',
-SOCIAL_TARGET: '&st',
-TIMING_CATEGORY: '&utc',
-TIMING_LABEL: '&utl',
-TIMING_VALUE: '&utt',
-TIMING_VAR: '&utv',
-TITLE: '&dt',
-TRACKING_ID: '&tid',
-TRANSACTION_AFFILIATION: '&ta',
-TRANSACTION_ID: '&ti',
-TRANSACTION_REVENUE: '&tr',
-TRANSACTION_SHIPPING: '&ts',
-TRANSACTION_TAX: '&tt',
-USE_SECURE: 'useSecure',
-VIEWPORT_SIZE: '&vp'
+// provides object containing hit type mappings
+analytics.HitTypes
 
 ```
