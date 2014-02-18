@@ -57,3 +57,7 @@ analytics.Fields
 analytics.HitTypes
 
 ```
+
+Useful Links
+
+[Measurement Protocol Developer Guide](https://developers.google.com/analytics/devguides/collection/protocol/v1/devguide)

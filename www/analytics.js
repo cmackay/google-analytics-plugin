@@ -120,6 +120,14 @@ Analytics.prototype = {
     exec(success, error, 'GoogleAnalytics', 'send', [map]);
   },
 
+  sendAppView: function (screenName, success, error) {
+    var params = {};
+    params[this.Fields.HIT_TYPE]    = this.HitTypes.APP_VIEW;
+    params[this.Fields.SCREEN_NAME] = screenName;
+
+    this.send(params, success, error);
+  },
+
   close: function (success, error) {
     argscheck.checkArgs('FF', 'Analytics.close', arguments);
     exec(success, error, 'GoogleAnalytics', 'close', []);

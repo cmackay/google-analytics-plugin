@@ -19,6 +19,7 @@
 
 package com.cmackay.plugins.googleanalytics;
 
+import com.google.analytics.tracking.android.ExceptionReporter;
 import com.google.analytics.tracking.android.GAServiceManager;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Logger.LogLevel;
@@ -41,18 +42,24 @@ import java.util.Iterator;
 
 public class GoogleAnalyticsPlugin extends CordovaPlugin {
 
-  private static GoogleAnalytics mGa;
-  private static Tracker mTracker;
+  private static GoogleAnalytics ga;
+  private static GAServiceManager serviceManager;
+  private static Tracker tracker;
+  private static Thread.UncaughtExceptionHandler uncaughtExceptionHandler;
 
   private static final int GA_DISPATCH_PERIOD = 30;
   private static final LogLevel GA_LOG_LEVEL = LogLevel.VERBOSE;
 
   private void initializeGa() {
-    mGa = GoogleAnalytics.getInstance(cordova.getActivity());
-    mGa.getLogger().setLogLevel(GA_LOG_LEVEL);
+    ga = GoogleAnalytics.getInstance(cordova.getActivity());
+    ga.getLogger().setLogLevel(GA_LOG_LEVEL);
 
-    GAServiceManager.getInstance().setLocalDispatchPeriod(GA_DISPATCH_PERIOD);
+    serviceManager = GAServiceManager.getInstance();
+    serviceManager.setLocalDispatchPeriod(GA_DISPATCH_PERIOD);
+
+    uncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
   }
+
 
   /**
    * Initializes the plugin
@@ -102,42 +109,46 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
         return true;
       }
     } catch (Exception e) {
-      mGa.getLogger().error(e);
+      ga.getLogger().error(e);
       callback.error(e.getMessage());
     }
     return false;
   }
 
   private void setTrackingId(String trackingId) {
-    if (mTracker != null) {
+    if (tracker != null) {
       close();
     }
-    mTracker = mGa.getTracker(trackingId);
+    tracker = ga.getTracker(trackingId);
+
+    // setup uncaught exception handler
+    Thread.setDefaultUncaughtExceptionHandler(new ExceptionReporter(
+      tracker, serviceManager, uncaughtExceptionHandler, cordova.getActivity()));
   }
 
   private String get(String key) {
     assertTracker();
-    return mTracker.get(key);
+    return tracker.get(key);
   }
 
   private void set(String key, String value) {
     assertTracker();
-    mTracker.set(key, value);
+    tracker.set(key, value);
   }
 
   private void send(Map<String,String> map) {
     assertTracker();
-    mTracker.send(map);
+    tracker.send(map);
   }
 
   private void close() {
     assertTracker();
-    mGa.closeTracker(mTracker.getName());
-    mTracker = null;
+    ga.closeTracker(tracker.getName());
+    tracker = null;
   }
 
   private void assertTracker() {
-    if (mTracker == null) {
+    if (tracker == null) {
       throw new IllegalStateException("Tracker not initialized. Call setTrackerId prior to using tracker.");
     }
   }
