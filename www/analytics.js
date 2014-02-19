@@ -110,7 +110,7 @@ Analytics.prototype = {
   },
 
   get: function (key, success, error) {
-    argscheck.checkArgs('sFF', 'GoogleAnalytics.get', arguments);
+    argscheck.checkArgs('sfF', 'GoogleAnalytics.get', arguments);
     exec(success, error, 'GoogleAnalytics', 'get', [key]);
   },
 

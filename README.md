@@ -56,7 +56,7 @@ analytics.HitTypes
 //  trackingId  - String    (required)
 //  success     - Function  (optional)
 //  error       - Function  (optional)
-analytics.setTrackingId(trackingId, successCallback, errorCallback);
+analytics.setTrackingId(trackingId, sucess, error);
 
 // Sends an app view hit
 //
@@ -110,7 +110,7 @@ analytics.set(name, value, successCallback, errorCallback);
 // Gets a field value. Returned as argument to success callback
 //
 //  name        - String    (required)
-//  success     - Function  (optional)
+//  success     - Function  (required)
 //  error       - Function  (optional)
 analytics.get(name, successCallback, errorCallback);
 
