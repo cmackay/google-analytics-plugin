@@ -1,11 +1,29 @@
 google-analytics-plugin
 =======================
 
-Cordova Google Analytics v3 Plugin for Android &amp; iOS
+Provides Apache Cordova/Phonegap support for Google Analytics v3 (Universal Analytics) using the native sdks for Android &amp; iOS.
 
-Provides Apache Cordova support for Google Analytics v3 (Universal Analytics) using the native sdks for Android &ampl iOS.
+This plugin provides support for some of the more specific analytics functions (screen, event & exception tracking, custom metrics & dimensions) and also the more generic set and send functions which can be used to implement all of the Google Analytics functions.
 
-Rather than implementing specific methods for tracking screen views and events, this plugin provides the more generic send/set methods.
+As an example tracking a screen could be implement using either the sendAppView function or the send function:
+
+```js
+analytics.sendAppView('home', successCallback, errorCallback);
+
+// or
+
+var params = {};
+params[Fields.HIT_TYPE] = HitTypes.APP_VIEW;
+params[Fields.SCREEN_NAME] = 'home';
+analytics.send(params, successCallback, errorCallback);
+
+```
+
+The send & set functions provide maximum flexibility and allow you to utilize all of the Google Analytics collection calls. Some helper function are also provided to support some of the more common analytic functions.
+
+For more information about measurement protocol refer to the following page:
+
+[Measurement Protocol Developer Guide](https://developers.google.com/analytics/devguides/collection/protocol/v1/devguide)
 
 ## Installation
 ```
@@ -16,18 +34,10 @@ cordova plugin add https://github.com/cmackay/google-analytics-plugin.git
 
 ```js
 
-// basic example using send function
+// basic example for tracking a screen view
 
-var Fields    = analytics.Fields,
-    HitTypes  = analytics.HitTypes;
-
-analytics.setTrackingId('UA-XXXXX-X', successCallback, errorCallback);
-
-var params = {};
-params[Fields.HIT_TYPE] = HitTypes.APP_VIEW;
-params[Fields.SCREEN_NAME] = 'home';
-
-analytics.send(params, successCallback, errorCallback);
+analytics.setTrackingId('UA-XXXXX-X');
+analytics.sendAppView('home');
 
 ```
 
@@ -35,29 +45,90 @@ analytics.send(params, successCallback, errorCallback);
 
 ```js
 
-// sets the tracking id (must be called first)
-analytics.setTrackingId(trackingId, successCallback, errorCallback);
-
-// sets a name and a value, to unset a value pass a null value
-analytics.set(name, value, successCallback, errorCallback);
-
-// gets the current value for the specified name
-analytics.get(name, successCallback, errorCallback);
-
-// sends the params object (key names should be from Fields)
-analytics.send(params, successCallback, errorCallback);
-
-// closes the current tracker
-analytics.close(successCallback, errorCallback);
-
-// provides object containing field name mappings
+// object containing field mapping
 analytics.Fields
 
-// provides object containing hit type mappings
+// object containing hit type mappings
 analytics.HitTypes
+
+// Sets the tracking id (must be called first)
+//
+//  trackingId  - String    (required)
+//  success     - Function  (optional)
+//  error       - Function  (optional)
+analytics.setTrackingId(trackingId, successCallback, errorCallback);
+
+// Sends an app view hit
+//
+//  screenName  - String    (required)
+//  success     - Function  (optional)
+//  error       - Function  (optional)
+analytic.sendAppView(screenName, success, error);
+
+// Sends an event hit
+//
+//  category  - String    (required)
+//  action    - String    (required)
+//  label     - String    (optional)
+//  value     - Number    (optional)
+//  success   - Function  (optional)
+//  error     - Function  (optional)
+analytic.sendEvent(category, action, label, value, success, error);
+
+// Sends an exception hit
+//
+//  description - String    (required)
+//  fatal       - boolean   (required)
+//  success     - Function  (optional)
+//  error       - Function  (optional)
+analytic.sendException(description, fatal, success, error);
+
+// Sets a custom dimension
+//
+//  id        - Number    (required)
+//  value     - String    (optional)
+//  success   - Function  (optional)
+//  error     - Function  (optional)
+analytic.customDimension(id, value, successCallback, errorCallback);
+
+// Sets a custom metric
+//
+//  id        - Number    (required)
+//  value     - Number    (optional)
+//  success   - Function  (optional)
+//  error     - Function  (optional)
+analytic.customMetric(id, value, successCallback, errorCallback);
+
+// Sets a field
+//
+//  name        - String    (required)
+//  value       - String    (optional) use null to unset a field
+//  success     - Function  (optional)
+//  error       - Function  (optional)
+analytics.set(name, value, successCallback, errorCallback);
+
+// Gets a field value. Returned as argument to success callback
+//
+//  name        - String    (required)
+//  success     - Function  (optional)
+//  error       - Function  (optional)
+analytics.get(name, successCallback, errorCallback);
+
+// Generates a hit to be sent with the specified params and current field values
+//
+//  params      - Object    (required)
+//  success     - Function  (optional)
+//  error       - Function  (optional)
+analytics.send(params, successCallback, errorCallback);
+
+// Closes the the tracker
+//
+//  success     - Function  (optional)
+//  error       - Function  (optional)
+analytics.close(successCallback, errorCallback);
 
 ```
 
 ## Useful Links
 
-[Measurement Protocol Developer Guide](https://developers.google.com/analytics/devguides/collection/protocol/v1/devguide)
+
