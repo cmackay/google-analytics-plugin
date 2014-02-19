@@ -9,9 +9,11 @@
   </engines>
 
   <name>GoogleAnalytics</name>
-  <description>Plugin for Google Analytics SDK 3.0</description>
+  <description>Plugin for Google Analytics SDK 3.0 (Android, iOS)</description>
   <author>Craig MacKay</author>
   <license>Apache 2.0</license>
+  <keywords>cordova,analytics</keywords>
+  <repo>https://github.com/cmackay/google-analytics-plugin.git</repo>
 
   <js-module src="www/analytics.js" name="GoogleAnalytics">
     <clobbers target="navigator.analytics" />
