@@ -129,6 +129,5 @@ analytics.close(successCallback, errorCallback);
 
 ```
 
-## Useful Links
 
 
