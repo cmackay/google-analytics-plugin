@@ -56,7 +56,7 @@ analytics.HitTypes
 //  trackingId  - String    (required)
 //  success     - Function  (optional)
 //  error       - Function  (optional)
-analytics.setTrackingId(trackingId, sucess, error);
+analytics.setTrackingId(trackingId, success, error);
 
 // Sends an app view hit
 //
