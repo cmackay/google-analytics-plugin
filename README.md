@@ -11,16 +11,17 @@ As an example tracking a screen could be implement using either the sendAppView 
 
 var analytics = navigator.analytics;
 
+// set the tracking id
 analytics.setTrackingId('UA-XXXXX-X');
 
 analytics.sendAppView('home', successCallback, errorCallback);
 
-// or
+// or the same could be done using the send function
 
 var Fields    = analytics.Fields,
-    HitTypes  = analytics.HitTypes;
+    HitTypes  = analytics.HitTypes,
+    params    = {};
 
-var params = {};
 params[Fields.HIT_TYPE]     = HitTypes.APP_VIEW;
 params[Fields.SCREEN_NAME]  = 'home';
 
