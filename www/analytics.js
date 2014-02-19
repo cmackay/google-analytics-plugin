@@ -135,12 +135,12 @@ Analytics.prototype = {
   },
 
   customMetric: function (id, value, success, error) {
-    argscheck.checkArgs('nNFF', 'GoogleAnalytics.customMetric', arguments);
+    argscheck.checkArgs('n*FF', 'GoogleAnalytics.customMetric', arguments);
     this.set('cm' + id, value, success, error);
   },
 
   sendEvent: function (category, action, label, value, success, error) {
-    argscheck.checkArgs('ssSNFF', 'GoogleAnalytics.customMetric', arguments);
+    argscheck.checkArgs('ssSNFF', 'GoogleAnalytics.sendEvent', arguments);
     var params = {};
     params[Fields.HIT_TYPE]       = HitTypes.EVENT;
     params[Fields.EVENT_CATEGORY] = category;
