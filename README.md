@@ -11,6 +11,8 @@ As an example tracking a screen could be implement using either the sendAppView 
 
 var analytics = navigator.analytics;
 
+analytics.setTrackingId('UA-XXXXX-X');
+
 analytics.sendAppView('home', successCallback, errorCallback);
 
 // or
@@ -35,17 +37,6 @@ For more information about measurement protocol refer to the following page:
 ## Installation
 ```
 cordova plugin add https://github.com/cmackay/google-analytics-plugin.git
-```
-
-## Example Usage
-
-```js
-
-// basic example for tracking a screen view
-
-analytics.setTrackingId('UA-XXXXX-X');
-analytics.sendAppView('home');
-
 ```
 
 ## API
