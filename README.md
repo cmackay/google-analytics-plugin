@@ -49,6 +49,8 @@ analytics.Fields
 // object containing hit type mappings
 analytics.HitTypes
 
+// all of the function support success and error callback functions
+
 // Sets the tracking id (must be called first)
 //
 //  trackingId  - String    (required)
@@ -87,7 +89,7 @@ analytic.sendException(description, fatal, success, error);
 //  value     - String    (optional)
 //  success   - Function  (optional)
 //  error     - Function  (optional)
-analytic.customDimension(id, value, successCallback, errorCallback);
+analytic.customDimension(id, value, success, error);
 
 // Sets a custom metric
 //
@@ -95,7 +97,7 @@ analytic.customDimension(id, value, successCallback, errorCallback);
 //  value     - Number    (optional)
 //  success   - Function  (optional)
 //  error     - Function  (optional)
-analytic.customMetric(id, value, successCallback, errorCallback);
+analytic.customMetric(id, value, success, error);
 
 // Sets a field
 //
@@ -103,27 +105,27 @@ analytic.customMetric(id, value, successCallback, errorCallback);
 //  value       - String    (optional) use null to unset a field
 //  success     - Function  (optional)
 //  error       - Function  (optional)
-analytics.set(name, value, successCallback, errorCallback);
+analytics.set(name, value, success, error);
 
 // Gets a field value. Returned as argument to success callback
 //
 //  name        - String    (required)
 //  success     - Function  (required)
 //  error       - Function  (optional)
-analytics.get(name, successCallback, errorCallback);
+analytics.get(name, success, error);
 
 // Generates a hit to be sent with the specified params and current field values
 //
 //  params      - Object    (required)
 //  success     - Function  (optional)
 //  error       - Function  (optional)
-analytics.send(params, successCallback, errorCallback);
+analytics.send(params, success, error);
 
 // Closes the the tracker
 //
 //  success     - Function  (optional)
 //  error       - Function  (optional)
-analytics.close(successCallback, errorCallback);
+analytics.close(success, error);
 
 ```
 
