@@ -8,13 +8,20 @@ This plugin provides support for some of the more specific analytics functions (
 As an example tracking a screen could be implement using either the sendAppView function or the send function:
 
 ```js
+
+var analytics = navigator.analytics;
+
 analytics.sendAppView('home', successCallback, errorCallback);
 
 // or
 
+var Fields    = analytics.Fields,
+    HitTypes  = analytics.HitTypes;
+
 var params = {};
-params[Fields.HIT_TYPE] = HitTypes.APP_VIEW;
-params[Fields.SCREEN_NAME] = 'home';
+params[Fields.HIT_TYPE]     = HitTypes.APP_VIEW;
+params[Fields.SCREEN_NAME]  = 'home';
+
 analytics.send(params, successCallback, errorCallback);
 
 ```

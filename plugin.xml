@@ -14,7 +14,7 @@
   <license>Apache 2.0</license>
 
   <js-module src="www/analytics.js" name="GoogleAnalytics">
-    <clobbers target="analytics" />
+    <clobbers target="navigator.analytics" />
   </js-module>
 
   <platform name="ios">
