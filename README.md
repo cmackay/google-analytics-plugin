@@ -3,9 +3,9 @@ google-analytics-plugin
 
 Provides Apache Cordova/Phonegap support for Google Analytics v3 (Universal Analytics) using the native sdks for Android &amp; iOS.
 
-This plugin provides support for some of the more specific analytics functions (screen, event & exception tracking, custom metrics & dimensions) and also the more generic set and send functions which can be used to implement all of the Google Analytics functions.
+This plugin provides support for some of the more specific analytics functions (screen, event & exception tracking, custom metrics & dimensions) and also the more generic set and send functions which can be used to implement all of the Google Analytics collection features.
 
-As an example tracking a screen could be implement using either the sendAppView function or the send function:
+As an example tracking a screen could be implemented using either the sendAppView function or the send function:
 
 ```js
 
