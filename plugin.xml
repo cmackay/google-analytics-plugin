@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
   xmlns:android="http://schemas.android.com/apk/res/android"
   id="com.cmackay.plugins.googleanalytics"
-  version="0.1.0">
+  version="0.1.1">
 
   <engines>
     <engine name="cordova" version=">=3.0.0" />
@@ -38,7 +38,7 @@
 
     <framework src="SystemConfiguration.framework" />
     <framework src="CoreData.framework" />
-    <framework src="AdSupport.framework" />
+    <framework src="libsqlite3.dylib" />
     <framework src="libz.dylib" />
   </platform>
 
