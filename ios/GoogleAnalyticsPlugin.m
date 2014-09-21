@@ -31,13 +31,25 @@
 
   [GAI sharedInstance].dispatchInterval = 10;
   [GAI sharedInstance].trackUncaughtExceptions = YES;
-  [[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
 
   if (tracker) {
     [[GAI sharedInstance] removeTrackerByName:[tracker name]];
   }
 
   tracker = [[GAI sharedInstance] trackerWithTrackingId:trackingId];
+  result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+
+  [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+}
+
+- (void) setLogLevel: (CDVInvokedUrlCommand*)command
+{
+  CDVPluginResult* result = nil;
+
+  GAILogLevel logLevel = (GAILogLevel)[command.arguments objectAtIndex:0];
+
+  [[[GAI sharedInstance] logger] setLogLevel:logLevel];
+
   result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 
   [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];

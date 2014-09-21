@@ -23,7 +23,8 @@
 'use strict';
 
 var argscheck = require('cordova/argscheck'),
-    exec      = require('cordova/exec');
+    exec      = require('cordova/exec'),
+    platform  = require('cordova/platform');
 
 var Fields = {
   ANDROID_APP_UID:          'AppUID',
@@ -95,6 +96,20 @@ var HitTypes = {
   TRANSACTION:  'transaction'
 };
 
+var LogLevel = {
+  VERBOSE: 0,
+  INFO:    1,
+  WARNING: 2,
+  ERROR:   3
+};
+
+var logLevelCount = 0, key;
+for (key in LogLevel) {
+  if (LogLevel.hasOwnProperty(key)) {
+    logLevelCount++;
+  }
+}
+
 function Analytics() {
 }
 
@@ -104,9 +119,20 @@ Analytics.prototype = {
 
   HitTypes: HitTypes,
 
+  LogLevel: LogLevel,
+
   setTrackingId: function (trackingId, success, error) {
     argscheck.checkArgs('sFF', 'GoogleAnalytics.setTrackingId', arguments);
     exec(success, error, 'GoogleAnalytics', 'setTrackingId', [trackingId]);
+  },
+
+  setLogLevel: function (logLevel, success, error) {
+    argscheck.checkArgs('nFF', 'GoogleAnalytics.setLogLevel', arguments);
+    if (platform.id === 'ios') {
+      // the log levels for android are 0,1,2,3 and for ios are 4,3,2,1
+      logLevel = logLevelCount - logLevel;
+    }
+    exec(success, error, 'GoogleAnalytics', 'setLogLevel', [logLevel]);
   },
 
   get: function (key, success, error) {
@@ -145,8 +171,8 @@ Analytics.prototype = {
     params[Fields.HIT_TYPE]       = HitTypes.EVENT;
     params[Fields.EVENT_CATEGORY] = category;
     params[Fields.EVENT_ACTION]   = action;
-    params[Fields.EVENT_LABEL]    = label;
-    params[Fields.EVENT_VALUE]    = value;
+    params[Fields.EVENT_LABEL]    = label || '';
+    params[Fields.EVENT_VALUE]    = value || 0;
     this.send(params, success, error);
   },
 
@@ -170,4 +196,3 @@ Analytics.prototype = {
 };
 
 module.exports = new Analytics();
-

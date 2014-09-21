@@ -26,6 +26,7 @@
 }
 
 - (void) setTrackingId: (CDVInvokedUrlCommand*)command;
+- (void) setLogLevel: (CDVInvokedUrlCommand*)command;
 - (void) get: (CDVInvokedUrlCommand*)command;
 - (void) set: (CDVInvokedUrlCommand*)command;
 - (void) send: (CDVInvokedUrlCommand*)command;

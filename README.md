@@ -20,10 +20,13 @@ analytics.sendAppView('home', successCallback, errorCallback);
 
 var Fields    = analytics.Fields,
     HitTypes  = analytics.HitTypes,
+    LogLevel  = analytics.LogLevel,
     params    = {};
 
 params[Fields.HIT_TYPE]     = HitTypes.APP_VIEW;
 params[Fields.SCREEN_NAME]  = 'home';
+
+analytics.setLogLevel()
 
 analytics.send(params, successCallback, errorCallback);
 
@@ -50,6 +53,9 @@ analytics.Fields
 // object containing hit type mappings
 analytics.HitTypes
 
+// object containing log level constants
+analytics.LogLevel  (VERBOSE, INFO, WARNING, ERROR)
+
 // all of the function support success and error callback functions
 
 // Sets the tracking id (must be called first)
@@ -58,6 +64,13 @@ analytics.HitTypes
 //  success     - Function  (optional)
 //  error       - Function  (optional)
 analytics.setTrackingId(trackingId, success, error);
+
+// Sets the log level
+//
+//  logLevel    - Number    (required)
+//  success     - Function  (optional)
+//  error       - Function  (optional)
+analytics.setLogLevel(logLevel, success, error);
 
 // Sends an app view hit
 //
@@ -70,8 +83,8 @@ analytic.sendAppView(screenName, success, error);
 //
 //  category  - String    (required)
 //  action    - String    (required)
-//  label     - String    (optional)
-//  value     - Number    (optional)
+//  label     - String    (optional, defaults to '')
+//  value     - Number    (optional, defaults to 0)
 //  success   - Function  (optional)
 //  error     - Function  (optional)
 analytic.sendEvent(category, action, label, value, success, error);
@@ -129,6 +142,3 @@ analytics.send(params, success, error);
 analytics.close(success, error);
 
 ```
-
-
-

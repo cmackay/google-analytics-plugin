@@ -46,11 +46,9 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
   private static Thread.UncaughtExceptionHandler uncaughtExceptionHandler;
 
   private static final int GA_DISPATCH_PERIOD = 10;
-  private static final LogLevel GA_LOG_LEVEL = LogLevel.VERBOSE;
 
   private void initializeGa() {
     ga = GoogleAnalytics.getInstance(cordova.getActivity());
-    ga.getLogger().setLogLevel(GA_LOG_LEVEL);
 
     serviceManager = GAServiceManager.getInstance();
     serviceManager.setLocalDispatchPeriod(GA_DISPATCH_PERIOD);
@@ -84,6 +82,11 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
     try {
       if ("setTrackingId".equals(action)) {
         setTrackingId(args.getString(0));
+        callback.success();
+        return true;
+
+      } else if ("setLogLevel".equals(action)) {
+        setLogLevel(args.getInt(0));
         callback.success();
         return true;
 
@@ -122,6 +125,27 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
     // setup uncaught exception handler
     Thread.setDefaultUncaughtExceptionHandler(new ExceptionReporter(
       tracker, serviceManager, uncaughtExceptionHandler, cordova.getActivity()));
+  }
+
+  private void setLogLevel(int level) {
+    LogLevel logLevel = null;
+    switch (level) {
+      case 0:
+        logLevel = LogLevel.VERBOSE;
+        break;
+      case 1:
+        logLevel = LogLevel.INFO;
+        break;
+      case 2:
+        logLevel = LogLevel.WARNING;
+        break;
+      case 3:
+        logLevel = LogLevel.ERROR;
+        break;
+    }
+    if (logLevel != null) {
+      ga.getLogger().setLogLevel(logLevel);
+    }
   }
 
   private String get(String key) {
