@@ -26,7 +26,7 @@ var Fields    = analytics.Fields,
 params[Fields.HIT_TYPE]     = HitTypes.APP_VIEW;
 params[Fields.SCREEN_NAME]  = 'home';
 
-analytics.setLogLevel()
+analytics.setLogLevel(LogLevel.INFO);
 
 analytics.send(params, successCallback, errorCallback);
 
