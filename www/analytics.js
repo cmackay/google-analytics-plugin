@@ -157,17 +157,24 @@ Analytics.prototype = {
 
   customDimension: function (id, value, success, error) {
     argscheck.checkArgs('n*FF', 'GoogleAnalytics.customDimension', arguments);
-    this.set('cd' + id, value, success, error);
+    this.set('&cd' + id, value, success, error);
   },
 
   customMetric: function (id, value, success, error) {
     argscheck.checkArgs('n*FF', 'GoogleAnalytics.customMetric', arguments);
-    this.set('cm' + id, value, success, error);
+    this.set('&cm' + id, value, success, error);
   },
 
   sendEvent: function (category, action, label, value, success, error) {
-    argscheck.checkArgs('ssSNFF', 'GoogleAnalytics.sendEvent', arguments);
-    var params = {};
+	this.sendEventWithParams(category, action, label, value, {}, success, error);
+  },
+
+  sendEventWithParams: function (category, action, label, value, params, success, error) {
+    argscheck.checkArgs('ssSNoFF', 'GoogleAnalytics.sendEvent', arguments);
+    if (params === undefined || params === null)
+    {
+    	params = {};
+    }
     params[Fields.HIT_TYPE]       = HitTypes.EVENT;
     params[Fields.EVENT_CATEGORY] = category;
     params[Fields.EVENT_ACTION]   = action;
@@ -177,8 +184,15 @@ Analytics.prototype = {
   },
 
   sendAppView: function (screenName, success, error) {
-    argscheck.checkArgs('sFF', 'GoogleAnalytics.sendAppView', arguments);
-    var params = {};
+	this.sendAppViewWithParams(screenName, {}, success, error)
+  },
+
+  sendAppViewWithParams: function (screenName, params, success, error) {
+    argscheck.checkArgs('soFF', 'GoogleAnalytics.sendAppView', arguments);
+    if (params === undefined || params === null)
+    {
+    	params = {};
+    }
     params[Fields.HIT_TYPE]       = HitTypes.APP_VIEW;
     params[Fields.SCREEN_NAME]    = screenName;
     this.send(params, success, error);
