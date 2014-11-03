@@ -107,7 +107,7 @@ analytic.sendEventWithParams(category, action, label, value, params, success, er
 //  error       - Function  (optional)
 analytic.sendException(description, fatal, success, error);
 
-// Tracks undhandled scripts errors (window.onerror) and then calls sendException.
+// Tracks unhandled scripts errors (window.onerror) and then calls sendException.
 // This function optionally can be passed an object containing a formmatter function
 // which takes in all the args to window.onError and should return a String with
 // the formatted error description to be sent to Google Analytics. Also the object
