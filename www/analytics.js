@@ -157,12 +157,12 @@ Analytics.prototype = {
 
   customDimension: function (id, value, success, error) {
     argscheck.checkArgs('n*FF', 'GoogleAnalytics.customDimension', arguments);
-    this.set('cd' + id, value, success, error);
+    this.set('&cd' + id, value, success, error);
   },
 
   customMetric: function (id, value, success, error) {
     argscheck.checkArgs('n*FF', 'GoogleAnalytics.customMetric', arguments);
-    this.set('cm' + id, value, success, error);
+    this.set('&cm' + id, value, success, error);
   },
 
   sendEvent: function (category, action, label, value, success, error) {
