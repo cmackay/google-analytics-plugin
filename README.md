@@ -79,6 +79,11 @@ analytics.setLogLevel(logLevel, success, error);
 //  error       - Function  (optional)
 analytic.sendAppView(screenName, success, error);
 
+// also supports the ability to send additional paramaters in the request
+// The params argument is an object which can contain additional key and value
+// parameters which will be sent as part of the analytics request
+analytic.sendAppViewWithParams(screenName, params, success, error);
+
 // Sends an event hit
 //
 //  category  - String    (required)
@@ -89,6 +94,11 @@ analytic.sendAppView(screenName, success, error);
 //  error     - Function  (optional)
 analytic.sendEvent(category, action, label, value, success, error);
 
+// also supports the ability to send additional paramaters in the request
+// The params argument is an object which can contain additional key and value
+// parameters which will be sent as part of the analytics request
+analytic.sendEventWithParams(category, action, label, value, params, success, error);
+
 // Sends an exception hit
 //
 //  description - String    (required)
@@ -96,6 +106,18 @@ analytic.sendEvent(category, action, label, value, success, error);
 //  success     - Function  (optional)
 //  error       - Function  (optional)
 analytic.sendException(description, fatal, success, error);
+
+// Tracks undhandled scripts errors (window.onerror) and then calls sendException.
+// This function optionally can be passed an object containing a formmatter function
+// which takes in all the args to window.onError and should return a String with
+// the formatted error description to be sent to Google Analytics. Also the object
+// can provide a fatal property which will be passed to sendException (defaults
+// to true).
+//
+//  opts        - Object    (optional) {formatter: Function, fatal: Boolean}
+//  success     - Function  (optional)
+//  error       - Function  (optional)
+analytic.trackUnhandledScriptErrors(opts, success, error);
 
 // Sets a custom dimension
 //

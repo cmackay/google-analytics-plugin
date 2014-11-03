@@ -23,6 +23,7 @@
 'use strict';
 
 var argscheck = require('cordova/argscheck'),
+    utils     = require('cordova/utils'),
     exec      = require('cordova/exec'),
     platform  = require('cordova/platform');
 
@@ -122,12 +123,12 @@ Analytics.prototype = {
   LogLevel: LogLevel,
 
   setTrackingId: function (trackingId, success, error) {
-    argscheck.checkArgs('sFF', 'GoogleAnalytics.setTrackingId', arguments);
+    argscheck.checkArgs('sFF', 'analytics.setTrackingId', arguments);
     exec(success, error, 'GoogleAnalytics', 'setTrackingId', [trackingId]);
   },
 
   setLogLevel: function (logLevel, success, error) {
-    argscheck.checkArgs('nFF', 'GoogleAnalytics.setLogLevel', arguments);
+    argscheck.checkArgs('nFF', 'analytics.setLogLevel', arguments);
     if (platform.id === 'ios') {
       // the log levels for android are 0,1,2,3 and for ios are 4,3,2,1
       logLevel = logLevelCount - logLevel;
@@ -136,44 +137,43 @@ Analytics.prototype = {
   },
 
   get: function (key, success, error) {
-    argscheck.checkArgs('sfF', 'GoogleAnalytics.get', arguments);
+    argscheck.checkArgs('sfF', 'analytics.get', arguments);
     exec(success, error, 'GoogleAnalytics', 'get', [key]);
   },
 
   set: function (key, value, success, error) {
-    argscheck.checkArgs('s*FF', 'GoogleAnalytics.set', arguments);
+    argscheck.checkArgs('s*FF', 'analytics.set', arguments);
     exec(success, error, 'GoogleAnalytics', 'set', [key, value]);
   },
 
   send: function (map, success, error) {
-    argscheck.checkArgs('oFF', 'GoogleAnalytics.send', arguments);
+    argscheck.checkArgs('oFF', 'analytics.send', arguments);
     exec(success, error, 'GoogleAnalytics', 'send', [map]);
   },
 
   close: function (success, error) {
-    argscheck.checkArgs('FF', 'GoogleAnalytics.close', arguments);
+    argscheck.checkArgs('FF', 'analytics.close', arguments);
     exec(success, error, 'GoogleAnalytics', 'close', []);
   },
 
   customDimension: function (id, value, success, error) {
-    argscheck.checkArgs('n*FF', 'GoogleAnalytics.customDimension', arguments);
+    argscheck.checkArgs('n*FF', 'analytics.customDimension', arguments);
     this.set('&cd' + id, value, success, error);
   },
 
   customMetric: function (id, value, success, error) {
-    argscheck.checkArgs('n*FF', 'GoogleAnalytics.customMetric', arguments);
+    argscheck.checkArgs('n*FF', 'analytics.customMetric', arguments);
     this.set('&cm' + id, value, success, error);
   },
 
   sendEvent: function (category, action, label, value, success, error) {
-	this.sendEventWithParams(category, action, label, value, {}, success, error);
+    this.sendEventWithParams(category, action, label, value, {}, success, error);
   },
 
   sendEventWithParams: function (category, action, label, value, params, success, error) {
-    argscheck.checkArgs('ssSNoFF', 'GoogleAnalytics.sendEvent', arguments);
-    if (params === undefined || params === null)
-    {
-    	params = {};
+    argscheck.checkArgs('ssSNoFF', 'analytics.sendEvent', arguments);
+    if (params === undefined || params === null) {
+      params = {};
     }
     params[Fields.HIT_TYPE]       = HitTypes.EVENT;
     params[Fields.EVENT_CATEGORY] = category;
@@ -184,14 +184,13 @@ Analytics.prototype = {
   },
 
   sendAppView: function (screenName, success, error) {
-	this.sendAppViewWithParams(screenName, {}, success, error)
+    this.sendAppViewWithParams(screenName, {}, success, error)
   },
 
   sendAppViewWithParams: function (screenName, params, success, error) {
-    argscheck.checkArgs('soFF', 'GoogleAnalytics.sendAppView', arguments);
-    if (params === undefined || params === null)
-    {
-    	params = {};
+    argscheck.checkArgs('soFF', 'analytics.sendAppView', arguments);
+    if (params === undefined || params === null) {
+      params = {};
     }
     params[Fields.HIT_TYPE]       = HitTypes.APP_VIEW;
     params[Fields.SCREEN_NAME]    = screenName;
@@ -199,12 +198,46 @@ Analytics.prototype = {
   },
 
   sendException: function (description, fatal, success, error) {
-    argscheck.checkArgs('s*FF', 'GoogleAnalytics.sendException', arguments);
+    argscheck.checkArgs('s*FF', 'analytics.sendException', arguments);
     var params = {};
     params[Fields.HIT_TYPE]        = HitTypes.EXCEPTION;
     params[Fields.EX_DESCRIPTION]  = description;
     params[Fields.EX_FATAL]        = fatal ? 1 : 0;
     this.send(params, success, error);
+  },
+
+  trackUnhandledScriptErrors: function (opts, success, error) {
+    argscheck.checkArgs('OFF', 'analytics.trackUnhandledScriptErrors', arguments);
+    var self = this,
+      fatal = true,
+      formatter;
+    if (opts && utils.typeName(opts.formatter) === 'Function') {
+      formatter = opts.formatter;
+    }
+    if (opts && utils.typeName(opts.fatal) === 'Boolean') {
+      fatal = opts.fatal;
+    }
+    window.onError = function (message, file, line, col, error) {
+      var description;
+      try {
+        if (formatter) {
+          description = formatter(message, file, line, col, error);
+        }
+      } catch (e) {
+        utils.alert(
+          'analytics.trackUnhandledScriptErrors invalid formatter. error:' + e);
+      } finally {
+        // if there is an error formatting or no formatter use default
+        if (description === undefined) {
+          description = (file || '');
+          if (line || col) {
+            description += ' (' + (line || '') + (col && ',' + col) + ')';
+          }
+          description += (description.length > 0 ? ':' : '') + message;
+        }
+      }
+      self.sendException(description, fatal, success, error);
+    };
   }
 
 };
