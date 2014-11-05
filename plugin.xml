@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
   xmlns:android="http://schemas.android.com/apk/res/android"
   id="com.cmackay.plugins.googleanalytics"
-  version="0.1.4">
+  version="0.1.5">
 
   <engines>
     <engine name="cordova" version=">=3.0.0" />
@@ -28,6 +28,10 @@
 
     <header-file src="ios/GAI.h" />
     <header-file src="ios/GAIDictionaryBuilder.h" />
+    <header-file src="ios/GAIEcommerceFields.h" />
+    <header-file src="ios/GAIEcommerceProduct.h" />
+    <header-file src="ios/GAIEcommerceProductAction.h" />
+    <header-file src="ios/GAIEcommercePromotion.h" />
     <header-file src="ios/GAIFields.h" />
     <header-file src="ios/GAILogger.h" />
     <header-file src="ios/GAITrackedViewController.h" />
