@@ -40,7 +40,7 @@ For more information about measurement protocol refer to the following page:
 
 ## Installation
 ```
-cordova plugin add https://github.com/cmackay/google-analytics-plugin.git
+cordova plugin add com.cmackay.plugins.googleanalytics
 ```
 
 ## API
