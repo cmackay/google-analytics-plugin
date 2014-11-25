@@ -163,9 +163,6 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
 
   private void close() {
     assertTracker();
-    if (tracker != null) {
-      throw new RuntimeException("bad stuff happened");
-    }
     ga.dispatchLocalHits();
     tracker = null;
   }
