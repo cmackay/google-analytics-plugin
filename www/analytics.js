@@ -136,12 +136,11 @@ Analytics.prototype = {
     exec(success, error, 'GoogleAnalytics', 'setLogLevel', [logLevel]);
   },
 
-
-  setIDFAEnabled: function (success, error) {
-       argscheck.checkArgs('fF', 'analytics.setIDFAEnabled', arguments);
+  enableAdvertisingIdCollection: function (success, error) {
+       argscheck.checkArgs('FF', 'analytics.enableAdvertisingIdCollection', arguments);
        exec(success, error, 'GoogleAnalytics', 'setIDFAEnabled');
   },
-  
+
   get: function (key, success, error) {
     argscheck.checkArgs('sfF', 'analytics.get', arguments);
     exec(success, error, 'GoogleAnalytics', 'get', [key]);

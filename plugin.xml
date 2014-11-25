@@ -2,14 +2,14 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
   xmlns:android="http://schemas.android.com/apk/res/android"
   id="com.cmackay.plugins.googleanalytics"
-  version="0.1.5">
+  version="0.1.6">
 
   <engines>
     <engine name="cordova" version=">=3.0.0" />
   </engines>
 
   <name>GoogleAnalytics</name>
-  <description>Plugin for Google Analytics SDK 3.0 (Android, iOS)</description>
+  <description>Plugin for Google Analytics Native SDKs (Android, iOS)</description>
   <author>Craig MacKay</author>
   <license>Apache 2.0</license>
   <keywords>cordova,analytics</keywords>
@@ -37,10 +37,10 @@
     <header-file src="ios/GAITrackedViewController.h" />
     <header-file src="ios/GAITracker.h" />
     <source-file src="ios/libGoogleAnalyticsServices.a" framework="true" />
-    <source-file src="ios/libAdIdAccess.a" framework="true" /> 
+    <source-file src="ios/libAdIdAccess.a" framework="true" />
     <header-file src="ios/GoogleAnalyticsPlugin.h" />
     <source-file src="ios/GoogleAnalyticsPlugin.m" />
-	
+
     <framework src="SystemConfiguration.framework" />
     <framework src="CoreData.framework" />
     <framework src="AdSupport.framework" />
@@ -55,13 +55,34 @@
       </feature>
     </config-file>
 
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+    </config-file>
+
     <config-file target="AndroidManifest.xml" parent="/*">
       <uses-permission android:name="android.permission.INTERNET" />
       <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     </config-file>
 
     <source-file src="android/GoogleAnalyticsPlugin.java" target-dir="src/com/cmackay/plugins/googleanalytics" />
-    <source-file src="android/libGoogleAnalyticsServices.jar" target-dir="libs" />
+    <source-file src="android/google-play-services.jar" target-dir="libs" />
+    <source-file src="android/version.xml" target-dir="res/values" />
+
+    <proguard-config>
+-keep class * extends java.util.ListResourceBundle {
+protected Object[][] getContents();
+}
+-keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
+public static final *** NULL;
+}
+-keepnames @com.google.android.gms.common.annotation.KeepName class *
+-keepclassmembernames class * {
+@com.google.android.gms.common.annotation.KeepName *;
+}
+-keepnames class * implements android.os.Parcelable {
+public static final ** CREATOR;
+}
+    </proguard-config>
   </platform>
 
 </plugin>

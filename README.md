@@ -1,7 +1,10 @@
 google-analytics-plugin
 =======================
 
-Provides Apache Cordova/Phonegap support for Google Analytics v3 (Universal Analytics) using the native sdks for Android &amp; iOS.
+Provides Apache Cordova/Phonegap support for Google Analytics using the native sdks for Android &amp; iOS.
+
+ * Android Native SDK v4 (using Google Play Services SDK)
+ * iOS Native SDK v3
 
 This plugin provides support for some of the more specific analytics functions (screen, event & exception tracking, custom metrics & dimensions) and also the more generic set and send functions which can be used to implement all of the Google Analytics collection features.
 
@@ -72,11 +75,11 @@ analytics.setTrackingId(trackingId, success, error);
 //  error       - Function  (optional)
 analytics.setLogLevel(logLevel, success, error);
 
-// Sets the log level
+// Sets whether the advertising id and ad targeting preference should be collected
 //
 //  success     - Function  (optional)
 //  error       - Function  (optional)
-analytics.setIDFAEnabled(success, error);
+analytics.enableAdvertisingIdCollection(success, error);
 
 // Turns on IDFA collection to get demographic data in GA
 //
