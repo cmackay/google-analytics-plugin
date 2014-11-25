@@ -72,17 +72,23 @@ analytics.setTrackingId(trackingId, success, error);
 //  error       - Function  (optional)
 analytics.setLogLevel(logLevel, success, error);
 
-// Sends an app view hit
+// Sets the log level
+//
+//  success     - Function  (optional)
+//  error       - Function  (optional)
+analytics.setIDFAEnabled(success, error);
+
+// Turns on IDFA collection to get demographic data in GA
 //
 //  screenName  - String    (required)
 //  success     - Function  (optional)
 //  error       - Function  (optional)
-analytic.sendAppView(screenName, success, error);
+analytics.sendAppView(screenName, success, error);
 
 // also supports the ability to send additional paramaters in the request
 // The params argument is an object which can contain additional key and value
 // parameters which will be sent as part of the analytics request
-analytic.sendAppViewWithParams(screenName, params, success, error);
+analytics.sendAppViewWithParams(screenName, params, success, error);
 
 // Sends an event hit
 //
@@ -92,12 +98,12 @@ analytic.sendAppViewWithParams(screenName, params, success, error);
 //  value     - Number    (optional, defaults to 0)
 //  success   - Function  (optional)
 //  error     - Function  (optional)
-analytic.sendEvent(category, action, label, value, success, error);
+analytics.sendEvent(category, action, label, value, success, error);
 
 // also supports the ability to send additional paramaters in the request
 // The params argument is an object which can contain additional key and value
 // parameters which will be sent as part of the analytics request
-analytic.sendEventWithParams(category, action, label, value, params, success, error);
+analytics.sendEventWithParams(category, action, label, value, params, success, error);
 
 // Sends an exception hit
 //
@@ -105,7 +111,7 @@ analytic.sendEventWithParams(category, action, label, value, params, success, er
 //  fatal       - boolean   (required)
 //  success     - Function  (optional)
 //  error       - Function  (optional)
-analytic.sendException(description, fatal, success, error);
+analytics.sendException(description, fatal, success, error);
 
 // Tracks unhandled scripts errors (window.onerror) and then calls sendException.
 // This function optionally can be passed an object containing a formmatter function
@@ -117,7 +123,7 @@ analytic.sendException(description, fatal, success, error);
 //  opts        - Object    (optional) {formatter: Function, fatal: Boolean}
 //  success     - Function  (optional)
 //  error       - Function  (optional)
-analytic.trackUnhandledScriptErrors(opts, success, error);
+analytics.trackUnhandledScriptErrors(opts, success, error);
 
 // Sets a custom dimension
 //
@@ -125,7 +131,7 @@ analytic.trackUnhandledScriptErrors(opts, success, error);
 //  value     - String    (optional)
 //  success   - Function  (optional)
 //  error     - Function  (optional)
-analytic.customDimension(id, value, success, error);
+analytics.customDimension(id, value, success, error);
 
 // Sets a custom metric
 //
@@ -133,7 +139,7 @@ analytic.customDimension(id, value, success, error);
 //  value     - Number    (optional)
 //  success   - Function  (optional)
 //  error     - Function  (optional)
-analytic.customMetric(id, value, success, error);
+analytics.customMetric(id, value, success, error);
 
 // Sets a field
 //

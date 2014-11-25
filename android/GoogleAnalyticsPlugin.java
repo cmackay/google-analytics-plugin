@@ -90,6 +90,11 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
         callback.success();
         return true;
 
+      } else if ("setIDFAEnabled".equals(action)) {
+      	setIDFAEnabled();
+        callback.success();
+        return true;
+
       } else if ("get".equals(action)) {
         callback.success(get(args.getString(0)));
         return true;
@@ -148,6 +153,11 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
     }
   }
 
+  private void setIDFAEnabled() {
+  	assertTracker();
+  	tracker.enableAdvertisingIdCollection(true);
+  }
+  
   private String get(String key) {
     assertTracker();
     return tracker.get(key);
