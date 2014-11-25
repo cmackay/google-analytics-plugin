@@ -130,9 +130,4 @@
   [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
 }
 
-- (BOOL) application: (UIApplication *) application didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
-{
-    [[GAI sharedInstance] setTrackUncaughtExceptions:YES];
-}
-
 @end
