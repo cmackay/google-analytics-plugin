@@ -19,11 +19,10 @@
 
 package com.cmackay.plugins.googleanalytics;
 
-import com.google.analytics.tracking.android.ExceptionReporter;
-import com.google.analytics.tracking.android.GAServiceManager;
-import com.google.analytics.tracking.android.GoogleAnalytics;
-import com.google.analytics.tracking.android.Logger.LogLevel;
-import com.google.analytics.tracking.android.Tracker;
+import com.google.android.gms.analytics.Logger.LogLevel;
+import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.analytics.GoogleAnalytics;
+
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
@@ -41,21 +40,14 @@ import java.util.Iterator;
 public class GoogleAnalyticsPlugin extends CordovaPlugin {
 
   private static GoogleAnalytics ga;
-  private static GAServiceManager serviceManager;
   private static Tracker tracker;
-  private static Thread.UncaughtExceptionHandler uncaughtExceptionHandler;
 
   private static final int GA_DISPATCH_PERIOD = 10;
 
   private void initializeGa() {
     ga = GoogleAnalytics.getInstance(cordova.getActivity());
-
-    serviceManager = GAServiceManager.getInstance();
-    serviceManager.setLocalDispatchPeriod(GA_DISPATCH_PERIOD);
-
-    uncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+    ga.setLocalDispatchPeriod(GA_DISPATCH_PERIOD);
   }
-
 
   /**
    * Initializes the plugin
@@ -91,7 +83,7 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
         return true;
 
       } else if ("setIDFAEnabled".equals(action)) {
-      	setIDFAEnabled();
+        setIDFAEnabled();
         callback.success();
         return true;
 
@@ -125,15 +117,13 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
     if (tracker != null) {
       close();
     }
-    tracker = ga.getTracker(trackingId);
-
+    tracker = ga.newTracker(trackingId);
     // setup uncaught exception handler
-    Thread.setDefaultUncaughtExceptionHandler(new ExceptionReporter(
-      tracker, serviceManager, uncaughtExceptionHandler, cordova.getActivity()));
+    tracker.enableExceptionReporting(true);
   }
 
   private void setLogLevel(int level) {
-    LogLevel logLevel = null;
+    int logLevel = LogLevel.WARNING;
     switch (level) {
       case 0:
         logLevel = LogLevel.VERBOSE;
@@ -148,16 +138,14 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
         logLevel = LogLevel.ERROR;
         break;
     }
-    if (logLevel != null) {
-      ga.getLogger().setLogLevel(logLevel);
-    }
+    ga.getLogger().setLogLevel(logLevel);
   }
 
   private void setIDFAEnabled() {
-  	assertTracker();
-  	tracker.enableAdvertisingIdCollection(true);
+    assertTracker();
+    tracker.enableAdvertisingIdCollection(true);
   }
-  
+
   private String get(String key) {
     assertTracker();
     return tracker.get(key);
@@ -175,7 +163,10 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
 
   private void close() {
     assertTracker();
-    ga.closeTracker(tracker.getName());
+    if (tracker != null) {
+      throw new RuntimeException("bad stuff happened");
+    }
+    ga.dispatchLocalHits();
     tracker = null;
   }
 
