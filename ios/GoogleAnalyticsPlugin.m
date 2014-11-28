@@ -21,8 +21,60 @@
 #import "GAI.h"
 #import "GAIDictionaryBuilder.h"
 #import "GAIFields.h"
+#import "TAGContainer.h"
+#import "TAGContainerOpener.h"
+#import "TAGManager.h"
+
+@interface GoogleAnalyticsPlugin ()<TAGContainerOpenerNotifier>
+@end
 
 @implementation GoogleAnalyticsPlugin
+
+@synthesize tagManager = _tagManager;
+@synthesize container = _container;
+
+- (void) openContainer: (CDVInvokedUrlCommand*)command
+{
+    NSString* containerId = [command.arguments objectAtIndex:0];
+    self.tagManager = [TAGManager instance];
+    self.containerOpenedCallbackId = command.callbackId;
+    
+    // Optional: Change the LogLevel to Verbose to enable logging at VERBOSE and higher levels.
+    [self.tagManager.logger setLogLevel:kTAGLoggerLogLevelVerbose];
+    
+    /*
+     * Opens a container.
+     *
+     * @param containerId The ID of the container to load.
+     * @param tagManager The TAGManager instance for getting the container.
+     * @param openType The choice of how to open the container.
+     * @param timeout The timeout period (default is 2.0 seconds).
+     * @param notifier The notifier to inform on container load events.
+     */
+    [TAGContainerOpener openContainerWithId:containerId   // Update with your Container ID.
+                                 tagManager:self.tagManager
+                                   openType:kTAGOpenTypePreferFresh
+                                    timeout:nil
+                                   notifier:self];
+ 
+}
+
+/**
+ *
+ * TAGContainerOpenerNotifier callback. This will be called then openContainerWithId
+ * returns with the container
+ *
+ */
+- (void)containerAvailable:(TAGContainer *)container {
+    //
+    // Note that containerAvailable may be called on any thread, so you may need to dispatch back to
+    // your main thread.
+    //
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.container = container;
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:self.containerOpenedCallbackId];
+    });
+}
 
 - (void) setTrackingId: (CDVInvokedUrlCommand*)command
 {

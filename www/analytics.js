@@ -1,4 +1,4 @@
-
+cordova.define("com.cmackay.plugins.googleanalytics.GoogleAnalytics", function(require, exports, module) { 
 /*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -122,6 +122,11 @@ Analytics.prototype = {
 
   LogLevel: LogLevel,
 
+  openContainer: function (containerId, success, error) {
+    argscheck.checkArgs('sFF', 'analytics.openContainer', arguments);
+    exec(success, error, 'GoogleAnalytics', 'openContainer', [containerId]);
+  },
+               
   setTrackingId: function (trackingId, success, error) {
     argscheck.checkArgs('sFF', 'analytics.setTrackingId', arguments);
     exec(success, error, 'GoogleAnalytics', 'setTrackingId', [trackingId]);
@@ -259,3 +264,5 @@ Analytics.prototype = {
 };
 
 module.exports = new Analytics();
+
+});
