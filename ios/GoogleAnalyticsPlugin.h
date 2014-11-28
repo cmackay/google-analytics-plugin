@@ -19,12 +19,20 @@
 
 #import <Foundation/Foundation.h>
 #import <Cordova/CDV.h>
-#import "GAI.h"
+
+@protocol GAITracker;
+@class TAGManager;
+@class TAGContainer;
 
 @interface GoogleAnalyticsPlugin : CDVPlugin {
   id<GAITracker> tracker;
 }
 
+@property(nonatomic, retain) TAGManager *tagManager;
+@property(nonatomic, retain) TAGContainer *container;
+@property (nonatomic, strong) NSString* containerOpenedCallbackId;
+
+- (void) openContainer: (CDVInvokedUrlCommand*)command;
 - (void) setTrackingId: (CDVInvokedUrlCommand*)command;
 - (void) setLogLevel: (CDVInvokedUrlCommand*)command;
 - (void) setIDFAEnabled: (CDVInvokedUrlCommand*)command;
