@@ -138,7 +138,7 @@ Analytics.prototype = {
 
   enableAdvertisingIdCollection: function (success, error) {
        argscheck.checkArgs('FF', 'analytics.enableAdvertisingIdCollection', arguments);
-       exec(success, error, 'GoogleAnalytics', 'setIDFAEnabled');
+       exec(success, error, 'GoogleAnalytics', 'setIDFAEnabled', []);
   },
 
   get: function (key, success, error) {
