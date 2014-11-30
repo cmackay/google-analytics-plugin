@@ -61,6 +61,25 @@
 
 /**
  *
+ * Refresh an already opened container
+ *
+ **/
+- (void) refreshContainer: (CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* result = nil;
+    
+    if (!self.container) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"container not opened"];
+    } else {
+        [self.container refresh];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Refreshed"];
+    }
+    
+    [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+}
+
+/**
+ *
  * TAGContainerOpenerNotifier callback. This will be called then openContainerWithId
  * returns with the container
  *
@@ -76,6 +95,79 @@
     });
 }
 
+/**
+ *
+ * Get GTM config value for the passed in key
+ *
+ */
+- (void) getConfigStringValue: (CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* result = nil;
+    NSString* key = [command.arguments objectAtIndex:0];
+    
+    if (!self.container) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"container not opened"];
+    } else {
+        //
+        // Get the configuration value by key.
+        //
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[self.container stringForKey:key]];
+    }
+    [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+}
+
+- (void) getConfigBoolValue: (CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* result = nil;
+    NSString* key = [command.arguments objectAtIndex:0];
+    
+    if (!self.container) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"container not opened"];
+    } else {
+        //
+        // Get the configuration value by key.
+        //
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:[self.container booleanForKey:key]];
+    }
+    [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+}
+
+- (void) getConfigIntValue: (CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* result = nil;
+    NSString* key = [command.arguments objectAtIndex:0];
+    
+    if (!self.container) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"container not opened"];
+    } else {
+        //
+        // Get the configuration value by key.
+        //
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:[self.container int64ForKey:key]];
+    }
+    [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+}
+
+- (void) getConfigFloatValue: (CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* result = nil;
+    NSString* key = [command.arguments objectAtIndex:0];
+    
+    if (!self.container) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"container not opened"];
+    } else {
+        //
+        // Get the configuration value by key.
+        //
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDouble:[self.container doubleForKey:key]];
+    }
+    [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+}
+/**
+ *
+ * Initialise the tracker by using the passed in tracking ID
+ *
+ */
 - (void) setTrackingId: (CDVInvokedUrlCommand*)command
 {
   CDVPluginResult* result = nil;

@@ -127,6 +127,31 @@ Analytics.prototype = {
     exec(success, error, 'GoogleAnalytics', 'openContainer', [containerId]);
   },
                
+  refreshContainer: function(success, error) {
+    argscheck.checkArgs('fF', 'analytics.refreshContainer', arguments);
+    exec(success, error, 'GoogleAnalytics', 'refreshContainer');
+  },
+
+  getConfigStringValue: function(key, success, error) {
+    argscheck.checkArgs('sfF', 'analytics.getConfigStringValue', arguments);
+    exec(success, error, 'GoogleAnalytics', 'getConfigStringValue', [key]);
+  },
+               
+  getConfigBoolValue: function(key, success, error) {
+    argscheck.checkArgs('sfF', 'analytics.getConfigBoolValue', arguments);
+    exec(success, error, 'GoogleAnalytics', 'getConfigBoolValue', [key]);
+  },
+               
+  getConfigIntValue: function(key, success, error) {
+    argscheck.checkArgs('sfF', 'analytics.getConfigIntValue', arguments);
+    exec(success, error, 'GoogleAnalytics', 'getConfigIntValue', [key]);
+  },
+               
+  getConfigFloatValue: function(key, success, error) {
+    argscheck.checkArgs('sfF', 'analytics.getConfigFloatValue', arguments);
+    exec(success, error, 'GoogleAnalytics', 'getConfigFloatValue', [key]);
+  },
+               
   setTrackingId: function (trackingId, success, error) {
     argscheck.checkArgs('sFF', 'analytics.setTrackingId', arguments);
     exec(success, error, 'GoogleAnalytics', 'setTrackingId', [trackingId]);
