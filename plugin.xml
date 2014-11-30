@@ -36,6 +36,13 @@
     <header-file src="ios/GAILogger.h" />
     <header-file src="ios/GAITrackedViewController.h" />
     <header-file src="ios/GAITracker.h" />
+    
+    <header-file src="ios/TAGContainer.h" />
+    <header-file src="ios/TAGContainerOpener.h" />
+    <header-file src="ios/TAGDataLayer.h" />
+    <header-file src="ios/TAGLogger.h" />
+    <header-file src="ios/TAGManager.h" />
+
     <source-file src="ios/libGoogleAnalyticsServices.a" framework="true" />
     <source-file src="ios/libAdIdAccess.a" framework="true" />
     <header-file src="ios/GoogleAnalyticsPlugin.h" />
