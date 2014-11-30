@@ -172,4 +172,50 @@ analytics.send(params, success, error);
 //  error       - Function  (optional)
 analytics.close(success, error);
 
+//-------------------------------------------------------------
+// Google Tag manager related functions
+//
+// Google tag manager requires the default container included in the project. Currently
+// it is not implemented in the plugin therefore GTM always starts with an empty container 
+// and retrieves the container instance from the network. I.e. the container can not be used
+// until it can be retrieved from the net.
+// If you want to provide default container then include it in the project as a plist, json
+// or binary resource file.
+//
+//-------------------------------------------------------------
+
+//
+// Opens google tag manager container
+//
+// containerId - String   (required) 
+//   - the id of the container to be opened. The id is a string value in the form of 'GTM-XXXXXX'. 
+// success     - Function (required)
+//   - async callback invoked when the container is successfully opened
+// error       - Function (required)
+//   - failure callback, it has a single argument what contains the error message
+//
+analytics.openContainer: function (containerId, success, error);
+
+//
+// Refreshes and already opened google tag manager container from the network
+//
+// success     - Function (required)
+//   - async callback invoked when the container is successfully refreshed
+// error       - Function (required)
+//   - failure callback, it has a single argument what contains the error message
+//
+analytics.refreshContainer: function(success, error);
+
+//
+// Gets a string macro value from the container
+//
+// key        - String   (required) 
+//   - the macro key to get value for 
+// success     - Function (required)
+//   - async callback invoked when the container is successfully opened
+// error       - Function (required)
+//   - failure callback, it has a single argument what contains the error message
+//
+analytics.getConfigStringValue: function(key, success, error);
+               
 ```
