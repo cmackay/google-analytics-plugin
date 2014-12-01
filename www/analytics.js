@@ -1,4 +1,3 @@
-cordova.define("com.cmackay.plugins.googleanalytics.GoogleAnalytics", function(require, exports, module) { 
 /*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -279,4 +278,3 @@ Analytics.prototype = {
 
 module.exports = new Analytics();
 
-});
