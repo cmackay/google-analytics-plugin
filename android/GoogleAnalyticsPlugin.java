@@ -19,14 +19,20 @@
 
 package com.cmackay.plugins.googleanalytics;
 
+import com.google.android.gms.common.api.ResultCallback;
+
 import com.google.android.gms.analytics.Logger.LogLevel;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.analytics.GoogleAnalytics;
+
+import com.google.android.gms.tagmanager.ContainerHolder;
+import com.google.android.gms.tagmanager.TagManager;
 
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.PluginResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,16 +43,24 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class GoogleAnalyticsPlugin extends CordovaPlugin {
+public class GoogleAnalyticsPlugin extends CordovaPlugin
+  implements ResultCallback<ContainerHolder> {
 
   private static GoogleAnalytics ga;
   private static Tracker tracker;
+
+  private static TagManager tm;
+  private static ContainerHolder containerHolder;
 
   private static final int GA_DISPATCH_PERIOD = 10;
 
   private void initializeGa() {
     ga = GoogleAnalytics.getInstance(cordova.getActivity());
     ga.setLocalDispatchPeriod(GA_DISPATCH_PERIOD);
+  }
+
+  private void initializeTm() {
+    tm = TagManager.getInstance(cordova.getActivity());
   }
 
   /**
@@ -59,6 +73,7 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
   public void initialize(CordovaInterface cordova, CordovaWebView webView) {
     super.initialize(cordova, webView);
     initializeGa();
+    initializeTm();
   }
 
   /**
@@ -105,12 +120,68 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
         close();
         callback.success();
         return true;
+
+      } else if ("openContainer".equals(action)) {
+        openContainer(args.getString(0));
+        callback.success();
+        return true;
+
+      } else if ("getConfigStringValue".equals(action)) {
+        callback.success(getConfigStringValue(args.getString(0)));
+        return true;
+
+      } else if ("getConfigBoolValue".equals(action)) {
+        callback.sendPluginResult(new PluginResult(
+          PluginResult.Status.OK,
+          getConfigBoolValue(args.getString(0))));
+        return true;
+
+      } else if ("getConfigIntValue".equals(action)) {
+        callback.sendPluginResult(new PluginResult(
+          PluginResult.Status.OK,
+          getConfigIntValue(args.getString(0))));
+        return true;
+
+      } else if ("getConfigFloatValue".equals(action)) {
+        callback.sendPluginResult(new PluginResult(
+          PluginResult.Status.OK,
+          (float) getConfigFloatValue(args.getString(0))));
+        return true;
       }
     } catch (Exception e) {
       ga.getLogger().error(e);
       callback.error(e.getMessage());
     }
     return false;
+  }
+
+  public void onResult(ContainerHolder holder) {
+    containerHolder = holder;
+  }
+
+  private void openContainer(String containerId) {
+    tm.loadContainerPreferFresh(containerId, -1)
+      .setResultCallback(this);
+  }
+
+  private String getConfigStringValue(String key) {
+    assertContainer();
+    return containerHolder.getContainer().getString(key);
+  }
+
+  private boolean getConfigBoolValue(String key) {
+    assertContainer();
+    return containerHolder.getContainer().getBoolean(key);
+  }
+
+  private long getConfigIntValue(String key) {
+    assertContainer();
+    return containerHolder.getContainer().getLong(key);
+  }
+
+  private double getConfigFloatValue(String key) {
+    assertContainer();
+    return containerHolder.getContainer().getDouble(key);
   }
 
   private void setTrackingId(String trackingId) {
@@ -170,6 +241,12 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
   private void assertTracker() {
     if (tracker == null) {
       throw new IllegalStateException("Tracker not initialized. Call setTrackingId prior to using tracker.");
+    }
+  }
+
+  private void assertContainer() {
+    if (containerHolder == null ) {
+      throw new IllegalStateException("Container not initialized. Call openContainer prior to using container.");
     }
   }
 
