@@ -158,9 +158,15 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
       .setResultCallback(new ResultCallback<ContainerHolder>() {
 
         public void onResult(ContainerHolder holder) {
-          containerHolder = holder;
-          containerHolder.refresh();
-          callback.success();
+          if (holder.getStatus().isSuccess()) {
+            containerHolder = holder;
+            containerHolder.refresh();
+            callback.success();
+
+          } else {
+            callback.error(holder.getStatus().toString());
+
+          }
         }
       });
   }
