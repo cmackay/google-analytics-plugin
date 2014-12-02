@@ -43,8 +43,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class GoogleAnalyticsPlugin extends CordovaPlugin
-  implements ResultCallback<ContainerHolder> {
+public class GoogleAnalyticsPlugin extends CordovaPlugin {
 
   private static GoogleAnalytics ga;
   private static Tracker tracker;
@@ -122,8 +121,7 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin
         return true;
 
       } else if ("openContainer".equals(action)) {
-        openContainer(args.getString(0));
-        callback.success();
+        openContainer(args.getString(0), callback);
         return true;
 
       } else if ("getConfigStringValue".equals(action)) {
@@ -155,13 +153,16 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin
     return false;
   }
 
-  public void onResult(ContainerHolder holder) {
-    containerHolder = holder;
-  }
-
-  private void openContainer(String containerId) {
+  private void openContainer(String containerId, final CallbackContext callback) {
     tm.loadContainerPreferFresh(containerId, -1)
-      .setResultCallback(this);
+      .setResultCallback(new ResultCallback<ContainerHolder>() {
+
+        public void onResult(ContainerHolder holder) {
+          containerHolder = holder;
+          containerHolder.refresh();
+          callback.success();
+        }
+      });
   }
 
   private String getConfigStringValue(String key) {
