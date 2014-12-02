@@ -121,14 +121,30 @@ Analytics.prototype = {
 
   LogLevel: LogLevel,
 
+
+  getDatalayer: function (success, error) {
+    argscheck.checkArgs('FF', 'analytics.getDatalayer', arguments);
+    exec(success, error, 'GoogleAnalytics', 'getDatalayer', []);
+  },
+  
+  dataLayerPush: function (map, success, error) {
+    argscheck.checkArgs('oFF', 'analytics.dataLayerPush', arguments);
+    exec(success, error, 'GoogleAnalytics', 'dataLayerPush', [map]);
+  },
+
   openContainer: function (containerId, success, error) {
     argscheck.checkArgs('sFF', 'analytics.openContainer', arguments);
     exec(success, error, 'GoogleAnalytics', 'openContainer', [containerId]);
   },
+      
+  closeContainer: function (success, error) {
+    argscheck.checkArgs('sFF', 'analytics.closeContainer', arguments);
+    exec(success, error, 'GoogleAnalytics', 'closeContainer', []);
+  },
                
   refreshContainer: function(success, error) {
     argscheck.checkArgs('fF', 'analytics.refreshContainer', arguments);
-    exec(success, error, 'GoogleAnalytics', 'refreshContainer');
+    exec(success, error, 'GoogleAnalytics', 'refreshContainer', []);
   },
 
   getConfigStringValue: function(key, success, error) {
