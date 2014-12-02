@@ -197,6 +197,18 @@ analytics.close(success, error);
 analytics.openContainer: function (containerId, success, error);
 
 //
+// Closes an already opened google tag manager container
+// This results that the container will not be refreshed anymore
+// Further requests on the container will fail until the container reopened
+//
+// success     - Function (required)
+//   - async callback invoked when the container is successfully closed
+// error       - Function (required)
+//   - failure callback, it has a single argument what contains the error message
+//
+analytics.closeContainer: function (success, error);
+
+//
 // Refreshes and already opened google tag manager container from the network
 //
 // success     - Function (required)
@@ -207,15 +219,19 @@ analytics.openContainer: function (containerId, success, error);
 analytics.refreshContainer: function(success, error);
 
 //
-// Gets a string macro value from the container
+// Gets a macro value from the container (respectively)
 //
 // key        - String   (required) 
 //   - the macro key to get value for 
 // success     - Function (required)
-//   - async callback invoked when the container is successfully opened
+//   - async callback returning the value of the macro
 // error       - Function (required)
 //   - failure callback, it has a single argument what contains the error message
 //
 analytics.getConfigStringValue: function(key, success, error);
+analytics.getConfigStringValue: function(key, success, error);       
+analytics.getConfigBoolValue: function(key, success, error);           
+analytics.getConfigIntValue: function(key, success, error);          
+analytics.getConfigFloatValue: function(key, success, error);
                
 ```

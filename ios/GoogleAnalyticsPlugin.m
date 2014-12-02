@@ -24,6 +24,7 @@
 #import "TAGContainer.h"
 #import "TAGContainerOpener.h"
 #import "TAGManager.h"
+#import "TAGDataLayer.h"
 
 @interface GoogleAnalyticsPlugin ()<TAGContainerOpenerNotifier>
 @end
@@ -73,6 +74,26 @@
     } else {
         [self.container refresh];
         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Refreshed"];
+    }
+    
+    [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+}
+
+/**
+ *
+ * Closes an opened container
+ *
+ **/
+- (void) closeContainer: (CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* result = nil;
+    
+    if (!self.container) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Container not opened"];
+    } else {
+        [self.container close];
+        self.container = nil;
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Closed"];
     }
     
     [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
@@ -154,7 +175,7 @@
     NSString* key = [command.arguments objectAtIndex:0];
     
     if (!self.container) {
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"container not opened"];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Container not opened"];
     } else {
         //
         // Get the configuration value by key.
@@ -163,6 +184,66 @@
     }
     [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
 }
+
+- (void) getDatalayer: (CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* result = nil;
+    
+    if (!self.container) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Datalayer not found"];
+    } else {
+        //
+        // Get the configuration value by key.
+        //
+        TAGDataLayer *dataLayer = [self.tagManager dataLayer];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:dataLayer.dataLayer];
+    }
+    [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+}
+
+- (void) dataLayerPush: (CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* result = nil;
+    NSDictionary* params = [command.arguments objectAtIndex:0];
+    
+    TAGDataLayer *dataLayer = [self.tagManager dataLayer];
+    if (!dataLayer) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Datalayer not found"];
+    } else {
+        [dataLayer push:params];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    }
+    [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+}
+
+/*
+- (void) dataLayerGet: (CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* result = nil;
+    NSString* key = [command.arguments objectAtIndex:0];
+    
+    TAGDataLayer *dataLayer = [self.tagManager dataLayer];
+    if (!dataLayer) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Datalayer not found"];
+    } else {
+        NSObject *value = [dataLayer get:key];
+        NSError *error;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:value
+                                                           options:NSJSONWritingPrettyPrinted
+                                                             error:&error];
+        if (! jsonData) {
+            NSLog(@"Got an error: %@", error);
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error description]];
+        } else {
+            NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:jsonString];
+        }
+    }
+    [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+}
+*/
+
+
 /**
  *
  * Initialise the tracker by using the passed in tracking ID
