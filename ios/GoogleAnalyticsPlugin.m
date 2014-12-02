@@ -24,6 +24,7 @@
 #import "TAGContainer.h"
 #import "TAGContainerOpener.h"
 #import "TAGManager.h"
+#import "TAGDataLayer.h"
 
 @interface GoogleAnalyticsPlugin ()<TAGContainerOpenerNotifier>
 @end
