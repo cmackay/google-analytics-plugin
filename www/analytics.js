@@ -110,18 +110,10 @@ for (key in LogLevel) {
   }
 }
 
-function Analytics() {
+function Tagmanager() {
 }
 
-Analytics.prototype = {
-
-  Fields: Fields,
-
-  HitTypes: HitTypes,
-
-  LogLevel: LogLevel,
-
-
+Tagmanager.prototype = {
   getDatalayer: function (success, error) {
     argscheck.checkArgs('FF', 'analytics.getDatalayer', arguments);
     exec(success, error, 'GoogleAnalytics', 'getDatalayer', []);
@@ -165,7 +157,20 @@ Analytics.prototype = {
   getConfigFloatValue: function(key, success, error) {
     argscheck.checkArgs('sfF', 'analytics.getConfigFloatValue', arguments);
     exec(success, error, 'GoogleAnalytics', 'getConfigFloatValue', [key]);
-  },
+  }
+}
+
+
+function Analytics() {
+}
+
+Analytics.prototype = {
+
+  Fields: Fields,
+
+  HitTypes: HitTypes,
+
+  LogLevel: LogLevel,
                
   setTrackingId: function (trackingId, success, error) {
     argscheck.checkArgs('sFF', 'analytics.setTrackingId', arguments);
@@ -292,5 +297,8 @@ Analytics.prototype = {
 
 };
 
-module.exports = new Analytics();
+module.exports = {
+	tracker: new Analytics(),
+	tagmanager: new Tagmanager()
+	};
 
