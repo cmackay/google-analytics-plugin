@@ -118,7 +118,7 @@ Tagmanager.prototype = {
     argscheck.checkArgs('FF', 'analytics.getDatalayer', arguments);
     exec(success, error, 'GoogleAnalytics', 'getDatalayer', []);
   },
-  
+
   dataLayerPush: function (map, success, error) {
     argscheck.checkArgs('oFF', 'analytics.dataLayerPush', arguments);
     exec(success, error, 'GoogleAnalytics', 'dataLayerPush', [map]);
@@ -128,12 +128,12 @@ Tagmanager.prototype = {
     argscheck.checkArgs('sFF', 'analytics.openContainer', arguments);
     exec(success, error, 'GoogleAnalytics', 'openContainer', [containerId]);
   },
-      
+
   closeContainer: function (success, error) {
     argscheck.checkArgs('sFF', 'analytics.closeContainer', arguments);
     exec(success, error, 'GoogleAnalytics', 'closeContainer', []);
   },
-               
+
   refreshContainer: function(success, error) {
     argscheck.checkArgs('fF', 'analytics.refreshContainer', arguments);
     exec(success, error, 'GoogleAnalytics', 'refreshContainer', []);
@@ -143,23 +143,22 @@ Tagmanager.prototype = {
     argscheck.checkArgs('sfF', 'analytics.getConfigStringValue', arguments);
     exec(success, error, 'GoogleAnalytics', 'getConfigStringValue', [key]);
   },
-               
+
   getConfigBoolValue: function(key, success, error) {
     argscheck.checkArgs('sfF', 'analytics.getConfigBoolValue', arguments);
     exec(success, error, 'GoogleAnalytics', 'getConfigBoolValue', [key]);
   },
-               
+
   getConfigIntValue: function(key, success, error) {
     argscheck.checkArgs('sfF', 'analytics.getConfigIntValue', arguments);
     exec(success, error, 'GoogleAnalytics', 'getConfigIntValue', [key]);
   },
-               
+
   getConfigFloatValue: function(key, success, error) {
     argscheck.checkArgs('sfF', 'analytics.getConfigFloatValue', arguments);
     exec(success, error, 'GoogleAnalytics', 'getConfigFloatValue', [key]);
   }
-}
-
+};
 
 function Analytics() {
 }
@@ -171,7 +170,7 @@ Analytics.prototype = {
   HitTypes: HitTypes,
 
   LogLevel: LogLevel,
-               
+
   setTrackingId: function (trackingId, success, error) {
     argscheck.checkArgs('sFF', 'analytics.setTrackingId', arguments);
     exec(success, error, 'GoogleAnalytics', 'setTrackingId', [trackingId]);
@@ -311,5 +310,4 @@ Analytics.prototype = {
 module.exports = {
 	tracker: new Analytics(),
 	tagmanager: new Tagmanager()
-	};
-
+};
