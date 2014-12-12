@@ -55,21 +55,6 @@
   [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
 }
 
-- (void) setIDFAEnabled: (CDVInvokedUrlCommand*)command
-{
-  CDVPluginResult* result = nil;
-
-  if (!tracker) {
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"tracker not initialized"];
-  } else {
-    // Enable IDFA collection.
-    tracker.allowIDFACollection = YES;
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-  }
-
-  [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
-}
-
 - (void) get: (CDVInvokedUrlCommand*)command
 {
   CDVPluginResult* result = nil;
