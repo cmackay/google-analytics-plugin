@@ -76,6 +76,7 @@ analytics.setTrackingId(trackingId, success, error);
 analytics.setLogLevel(logLevel, success, error);
 
 // Sets whether the advertising id and ad targeting preference should be collected
+// (only enabled for Android since it can cause apps to be rejected from app store)
 //
 //  success     - Function  (optional)
 //  error       - Function  (optional)
