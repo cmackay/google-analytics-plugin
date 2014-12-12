@@ -70,110 +70,147 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
    * @return                Whether the action was valid.
    */
   @Override
-  public boolean execute(String action, JSONArray args, CallbackContext callback) throws JSONException {
-    try {
-      if ("setTrackingId".equals(action)) {
-        setTrackingId(args.getString(0));
-        callback.success();
-        return true;
+  public boolean execute(String action, final String rawArgs, final CallbackContext callbackContext) throws JSONException {
+    if ("setTrackingId".equals(action)) {
+      setTrackingId(rawArgs, callbackContext);
+      return true;
 
-      } else if ("setLogLevel".equals(action)) {
-        setLogLevel(args.getInt(0));
-        callback.success();
-        return true;
+    } else if ("setLogLevel".equals(action)) {
+      setLogLevel(rawArgs, callbackContext);
+      return true;
 
-      } else if ("setIDFAEnabled".equals(action)) {
-        setIDFAEnabled();
-        callback.success();
-        return true;
+    } else if ("setIDFAEnabled".equals(action)) {
+      setIDFAEnabled(rawArgs, callbackContext);
+      return true;
 
-      } else if ("get".equals(action)) {
-        callback.success(get(args.getString(0)));
-        return true;
+    } else if ("get".equals(action)) {
+      get(rawArgs, callbackContext);
+      return true;
 
-      } else if ("set".equals(action)) {
-        set(args.getString(0), args.isNull(1) ? null : args.getString(1));
-        callback.success();
-        return true;
+    } else if ("set".equals(action)) {
+      set(rawArgs, callbackContext);
+      return true;
 
-      } else if ("send".equals(action)) {
-        send(objectToMap(args.getJSONObject(0)));
-        callback.success();
-        return true;
+    } else if ("send".equals(action)) {
+      send(rawArgs, callbackContext);
+      return true;
 
-      } else if ("close".equals(action)) {
-        close();
-        callback.success();
-        return true;
-      }
-    } catch (Exception e) {
-      ga.getLogger().error(e);
-      callback.error(e.getMessage());
+    } else if ("close".equals(action)) {
+      close(rawArgs, callbackContext);
+      return true;
     }
     return false;
   }
 
-  private void setTrackingId(String trackingId) {
-    if (tracker != null) {
-      close();
+  private void setTrackingId(String rawArgs, CallbackContext callbackContext) {
+    try {
+      tracker = ga.newTracker(new JSONArray(rawArgs).getString(0));
+      // setup uncaught exception handler
+      tracker.enableExceptionReporting(true);
+      callbackContext.success();
+    } catch (JSONException e) {
+      callbackContext.error(e.toString());
     }
-    tracker = ga.newTracker(trackingId);
-    // setup uncaught exception handler
-    tracker.enableExceptionReporting(true);
   }
 
-  private void setLogLevel(int level) {
-    int logLevel = LogLevel.WARNING;
-    switch (level) {
-      case 0:
-        logLevel = LogLevel.VERBOSE;
-        break;
-      case 1:
-        logLevel = LogLevel.INFO;
-        break;
-      case 2:
-        logLevel = LogLevel.WARNING;
-        break;
-      case 3:
-        logLevel = LogLevel.ERROR;
-        break;
+  private void setLogLevel(String rawArgs, CallbackContext callbackContext) {
+    if (hasTracker(callbackContext)) {
+      try {
+        int level = new JSONArray(rawArgs).getInt(0);
+        int logLevel = LogLevel.WARNING;
+        switch (level) {
+          case 0:
+          logLevel = LogLevel.VERBOSE;
+          break;
+          case 1:
+          logLevel = LogLevel.INFO;
+          break;
+          case 2:
+          logLevel = LogLevel.WARNING;
+          break;
+          case 3:
+          logLevel = LogLevel.ERROR;
+          break;
+        }
+        ga.getLogger().setLogLevel(logLevel);
+        callbackContext.success();
+      } catch (JSONException e) {
+        callbackContext.error(e.toString());
+      }
     }
-    ga.getLogger().setLogLevel(logLevel);
   }
 
-  private void setIDFAEnabled() {
-    assertTracker();
-    tracker.enableAdvertisingIdCollection(true);
+  private void setIDFAEnabled(String rawArgs, CallbackContext callbackContext) {
+    if (hasTracker(callbackContext)) {
+      tracker.enableAdvertisingIdCollection(true);
+      callbackContext.success();
+    }
   }
 
-  private String get(String key) {
-    assertTracker();
-    return tracker.get(key);
+  private void get(String rawArgs, CallbackContext callbackContext) {
+    if (hasTracker(callbackContext)) {
+      try {
+        String value = tracker.get(new JSONArray(rawArgs).getString(0));
+        callbackContext.success(value);
+      } catch (JSONException e) {
+        callbackContext.error(e.toString());
+      }
+    }
   }
 
-  private void set(String key, String value) {
-    assertTracker();
-    tracker.set(key, value);
+  private void set(String rawArgs, CallbackContext callbackContext) {
+    if (hasTracker(callbackContext)) {
+      try {
+        JSONArray args = new JSONArray(rawArgs);
+        String key = args.getString(0);
+        String value = args.isNull(1) ? null : args.getString(1);
+        tracker.set(key, value);
+        callbackContext.success();
+      } catch (JSONException e) {
+        callbackContext.error(e.toString());
+      }
+    }
   }
 
-  private void send(Map<String,String> map) {
-    assertTracker();
-    tracker.send(map);
+  private void send(final String rawArgs, final CallbackContext callbackContext) {
+    cordova.getThreadPool().execute(new Runnable() {
+      public void run()  {
+        GoogleAnalyticsPlugin plugin = GoogleAnalyticsPlugin.this;
+        if (plugin.hasTracker(callbackContext)) {
+          try {
+            JSONArray args = new JSONArray(rawArgs);
+            plugin.tracker.send(objectToMap(args.getJSONObject(0)));
+            callbackContext.success();
+          } catch (JSONException e) {
+            callbackContext.error(e.toString());
+          }
+        }
+      }
+    });
   }
 
-  private void close() {
-    assertTracker();
-    ga.dispatchLocalHits();
-    tracker = null;
+  private void close(final String rawArgs, final CallbackContext callbackContext) {
+    cordova.getThreadPool().execute(new Runnable() {
+      public void run() {
+        GoogleAnalyticsPlugin plugin = GoogleAnalyticsPlugin.this;
+        if (plugin.hasTracker(callbackContext)) {
+          plugin.ga.dispatchLocalHits();
+          plugin.tracker = null;
+          callbackContext.success();
+        }
+      }
+    });
   }
 
-  private void assertTracker() {
+  private boolean hasTracker(CallbackContext callbackContext) {
     if (tracker == null) {
-      throw new IllegalStateException("Tracker not initialized. Call setTrackingId prior to using tracker.");
+      callbackContext.error("Tracker not initialized. Call setTrackingId prior to using tracker.");
+      return false;
     }
+    return true;
   }
 
-  private Map<String, String> objectToMap(JSONObject o) throws JSONException {
+  private static Map<String, String> objectToMap(JSONObject o) throws JSONException {
     if (o.length() == 0) {
       return Collections.<String, String>emptyMap();
     }
