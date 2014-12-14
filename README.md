@@ -57,7 +57,7 @@ analytics.Fields
 analytics.HitTypes
 
 // object containing log level constants
-analytics.LogLevel  (VERBOSE, INFO, WARNING, ERROR)
+analytics.LogLevel(VERBOSE, INFO, WARNING, ERROR)
 
 // all of the function support success and error callback functions
 
