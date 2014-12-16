@@ -29,7 +29,7 @@
   CDVPluginResult* result = nil;
   NSString* trackingId = [command.arguments objectAtIndex:0];
 
-  [GAI sharedInstance].dispatchInterval = 10;
+  [GAI sharedInstance].dispatchInterval = 1;
   [GAI sharedInstance].trackUncaughtExceptions = YES;
 
   if (tracker) {
