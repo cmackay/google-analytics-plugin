@@ -109,6 +109,16 @@ analytics.sendEvent(category, action, label, value, success, error);
 // parameters which will be sent as part of the analytics request
 analytics.sendEventWithParams(category, action, label, value, params, success, error);
 
+// Sends a user timing
+//
+//  category    - String    (required)
+//  variable    - String    (required)
+//  label       - String    (required)
+//  time        - Number    (required)
+//  success     - Function  (optional)
+//  error       - Function  (optional)
+analytics.sendTiming(category, variable, label, time, success, error);
+
 // Sends an exception hit
 //
 //  description - String    (required)

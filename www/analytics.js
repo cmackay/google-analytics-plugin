@@ -202,6 +202,17 @@ Analytics.prototype = {
     this.send(params, success, error);
   },
 
+  sendTiming: function (category, variable, label, time, success, error) {
+    argscheck.checkArgs('sssnFF', 'analytics.sendException', arguments);
+    var params = {};
+    params[Fields.HIT_TYPE]        = HitTypes.TIMING;
+    params[Fields.TIMING_CATEGORY] = category;
+    params[Fields.TIMING_VAR]      = variable;
+    params[Fields.TIMING_VALUE]    = time;
+    params[Fields.TIMING_LABEL]    = label;
+    this.send(params, success, error);
+  },
+
   sendException: function (description, fatal, success, error) {
     argscheck.checkArgs('s*FF', 'analytics.sendException', arguments);
     var params = {};
