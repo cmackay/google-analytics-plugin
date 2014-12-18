@@ -145,7 +145,6 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
     }
   }
 
-<<<<<<< HEAD
   private void setLogLevel(String rawArgs, CallbackContext callback) {
     if (hasTracker(callback)) {
       try {
@@ -164,18 +163,6 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
           case 3:
           logLevel = LogLevel.ERROR;
           break;
-=======
-        public void onResult(ContainerHolder holder) {
-          if (holder.getStatus().isSuccess()) {
-            containerHolder = holder;
-            containerHolder.refresh();
-            callback.success();
-
-          } else {
-            callback.error(holder.getStatus().toString());
-
-          }
->>>>>>> added status checking on open
         }
         ga.getLogger().setLogLevel(logLevel);
         callback.success();
