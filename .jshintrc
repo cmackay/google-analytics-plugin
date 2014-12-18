@@ -11,7 +11,7 @@
   "indent": 2,
   "maxstatements": 15,
   "maxparams": 10,
-  "maxcomplexity": 10,
+  "maxcomplexity": 9,
   "latedef": true,
   "newcap": true,
   "noarg": true,
