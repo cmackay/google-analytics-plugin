@@ -1,5 +1,6 @@
 {
   "node": true,
+  "browser": true,
   "esnext": true,
   "bitwise": true,
   "white": true,
@@ -9,8 +10,8 @@
   "immed": true,
   "indent": 2,
   "maxstatements": 15,
-  "maxparams": 6,
-  "maxcomplexity": 5,
+  "maxparams": 10,
+  "maxcomplexity": 9,
   "latedef": true,
   "newcap": true,
   "noarg": true,

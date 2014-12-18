@@ -238,7 +238,7 @@ Analytics.prototype = {
   },
 
   sendAppView: function (screenName, success, error) {
-    this.sendAppViewWithParams(screenName, {}, success, error)
+    this.sendAppViewWithParams(screenName, {}, success, error);
   },
 
   sendAppViewWithParams: function (screenName, params, success, error) {
