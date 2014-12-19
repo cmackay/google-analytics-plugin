@@ -205,7 +205,7 @@ analytics.close(success, error);
 // error       - Function (required)
 //   - failure callback, it has a single argument what contains the error message
 //
-analytics.tm.container.open: function (containerId, success, error);
+analytics.tm.container.open(containerId, success, error);
 
 //
 // Refreshes and already opened google tag manager container from the network
@@ -215,7 +215,7 @@ analytics.tm.container.open: function (containerId, success, error);
 // error       - Function (required)
 //   - failure callback, it has a single argument what contains the error message
 //
-analytics.tm.container.refresh: function(success, error);
+analytics.tm.container.refresh(success, error);
 
 //
 // Gets a macro value from the container (respectively)
@@ -227,14 +227,14 @@ analytics.tm.container.refresh: function(success, error);
 // error       - Function (required)
 //   - failure callback, it has a single argument what contains the error message
 //
-analytics.tm.container.getString: function(key, success, error);
-analytics.tm.container.getBoolean: function(key, success, error);
-analytics.tm.container.getDouble: function(key, success, error);
-analytics.tm.container.getLong: function(key, success, error);
+analytics.tm.container.getString(key, success, error);
+analytics.tm.container.getBoolean(key, success, error);
+analytics.tm.container.getDouble(key, success, error);
+analytics.tm.container.getLong(key, success, error);
 
-analytics.tm.datalayer.get: function(key, success, error);
-analytics.tm.datalayer.push: function(keyOrObject, optValue, success, error);
-analytics.tm.datalayer.pushEvent: function(eventName, optUpdates, success, error);
+analytics.tm.datalayer.get(key, success, error);
+analytics.tm.datalayer.push(keyOrObject, optValue, success, error);
+analytics.tm.datalayer.pushEvent(eventName, optUpdates, success, error);
 
 
 ```
