@@ -110,56 +110,6 @@ for (key in LogLevel) {
   }
 }
 
-function Tagmanager() {
-}
-
-Tagmanager.prototype = {
-  getDatalayer: function (success, error) {
-    argscheck.checkArgs('FF', 'analytics.getDatalayer', arguments);
-    exec(success, error, 'GoogleAnalytics', 'getDatalayer', []);
-  },
-
-  dataLayerPush: function (map, success, error) {
-    argscheck.checkArgs('oFF', 'analytics.dataLayerPush', arguments);
-    exec(success, error, 'GoogleAnalytics', 'dataLayerPush', [map]);
-  },
-
-  openContainer: function (containerId, success, error) {
-    argscheck.checkArgs('sFF', 'analytics.openContainer', arguments);
-    exec(success, error, 'GoogleAnalytics', 'openContainer', [containerId]);
-  },
-
-  closeContainer: function (success, error) {
-    argscheck.checkArgs('sFF', 'analytics.closeContainer', arguments);
-    exec(success, error, 'GoogleAnalytics', 'closeContainer', []);
-  },
-
-  refreshContainer: function(success, error) {
-    argscheck.checkArgs('fF', 'analytics.refreshContainer', arguments);
-    exec(success, error, 'GoogleAnalytics', 'refreshContainer', []);
-  },
-
-  getConfigStringValue: function(key, success, error) {
-    argscheck.checkArgs('sfF', 'analytics.getConfigStringValue', arguments);
-    exec(success, error, 'GoogleAnalytics', 'getConfigStringValue', [key]);
-  },
-
-  getConfigBoolValue: function(key, success, error) {
-    argscheck.checkArgs('sfF', 'analytics.getConfigBoolValue', arguments);
-    exec(success, error, 'GoogleAnalytics', 'getConfigBoolValue', [key]);
-  },
-
-  getConfigIntValue: function(key, success, error) {
-    argscheck.checkArgs('sfF', 'analytics.getConfigIntValue', arguments);
-    exec(success, error, 'GoogleAnalytics', 'getConfigIntValue', [key]);
-  },
-
-  getConfigFloatValue: function(key, success, error) {
-    argscheck.checkArgs('sfF', 'analytics.getConfigFloatValue', arguments);
-    exec(success, error, 'GoogleAnalytics', 'getConfigFloatValue', [key]);
-  }
-};
-
 function Analytics() {
 }
 
@@ -303,11 +253,74 @@ Analytics.prototype = {
       }
       self.sendException(description, fatal, success, error);
     };
+  },
+
+  // add the tag manager function to a tm namespace for now
+  tm: {
+
+    container: {
+
+      open: function (containerId, success, error) {
+        argscheck.checkArgs('sFF', 'analytics.tm.container.open', arguments);
+        exec(success, error, 'GoogleAnalytics', 'containerOpen', [containerId]);
+      },
+
+      refresh: function(success, error) {
+        argscheck.checkArgs('fF', 'analytics.tm.container.refresh', arguments);
+        exec(success, error, 'GoogleAnalytics', 'containerRefresh', []);
+      },
+
+      getString: function(key, success, error) {
+        argscheck.checkArgs('sfF', 'analytics.tm.container.getString', arguments);
+        exec(success, error, 'GoogleAnalytics', 'getContainerString', [key]);
+      },
+
+      getBoolean: function(key, success, error) {
+        argscheck.checkArgs('sfF', 'analytics.tm.container.getBoolean', arguments);
+        exec(success, error, 'GoogleAnalytics', 'getContainerBoolean', [key]);
+      },
+
+      getLong: function(key, success, error) {
+        argscheck.checkArgs('sfF', 'analytics.tm.container.getLong', arguments);
+        exec(success, error, 'GoogleAnalytics', 'getContainerLong', [key]);
+      },
+
+      getDouble: function(key, success, error) {
+        argscheck.checkArgs('sfF', 'analytics.tm.container.getDouble', arguments);
+        exec(success, error, 'GoogleAnalytics', 'getContainerDouble', [key]);
+      }
+    },
+
+    datalayer: {
+
+      get: function (key, success, error) {
+        argscheck.checkArgs('sFF', 'analytics.tm.datalayer.get', arguments);
+        exec(success, error, 'GoogleAnalytics', 'dataLayerValue', [key]);
+      },
+
+      push: function (keyOrObject, optValue, success, error) {
+        if (optValue && utils.typeName(optValue) === 'Function') {
+          // if optValue is a function then optValue is the successCallback
+          error = success;
+          success = optValue;
+          optValue = null;
+        }
+        exec(success, error, 'GoogleAnalytics', 'dataLayerPush', [keyOrObject, optValue]);
+      },
+
+      pushEvent: function (eventName, updates, success, error) {
+        if (updates && utils.typeName(updates) === 'Function') {
+          // if updates is a function then optValue is the successCallback
+          error = success;
+          success = updates;
+          updates = null;
+        }
+        exec(success, error, 'GoogleAnalytics', 'dataLayerPushEvent', [
+          eventName, updates]);
+      }
+    }
   }
 
 };
 
-module.exports = {
-	tracker: new Analytics(),
-	tagmanager: new Tagmanager()
-};
+module.exports = new Analytics();

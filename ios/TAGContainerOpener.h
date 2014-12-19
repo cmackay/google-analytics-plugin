@@ -34,7 +34,7 @@ typedef enum {
  * will continue to run while the call is blocked.
  *
  * @return The requested container.
- * @see TAGContainerOpener::openContainerWithId:tagManager:openType:timeout:
+ * @see TAGContainerOpener::containerOpenWithId:tagManager:openType:timeout:
  */
 - (TAGContainer *)get;
 
@@ -54,7 +54,7 @@ typedef enum {
  * A class that implements this protocol will receive a notification when a
  * container is available for use. Developers can pass an instance of a class that implements
  * this protocol to
- * TAGContainerOpener::openContainerWithId:tagManager:openType:timeout:notifier:
+ * TAGContainerOpener::containerOpenWithId:tagManager:openType:timeout:notifier:
  */
 @protocol TAGContainerOpenerNotifier
 
@@ -70,7 +70,7 @@ typedef enum {
 /**
  * A helper class for opening containers.
  *
- * This is a wrapper around TAGManager::openContainerById:callback: method for
+ * This is a wrapper around TAGManager::containerOpenById:callback: method for
  * callers that provides support for timeouts.
  *
  * The following is a sample showing waiting up to 0.1 seconds for the container
@@ -80,7 +80,7 @@ typedef enum {
  *     NSTimeInterval timeout = 0.1;
  *     TagManager *tagManager = [TagManager instance];
  *     TAGContainerFuture *future =
- *         [TAGContainerOpener openContainerWithId:@"GTM-XXXX"
+ *         [TAGContainerOpener containerOpenWithId:@"GTM-XXXX"
  *                                      tagManager:tagManager
  *                                        openType:kTAGOpenTypePreferNonDefault
  *                                         timeout:&timeout];
@@ -90,7 +90,7 @@ typedef enum {
  * If the caller wants to be asynchronously notified when the container is
  * available but wants to manually specify the timeout to 0.5 seconds, then the
  * caller should subclass TAGContainerOpenerNotifier, make the call to
- * TAGContainerOpener::openContainerWithId:tagManager:openType:timeout:notifier:
+ * TAGContainerOpener::containerOpenWithId:tagManager:openType:timeout:notifier:
  * with timeout set to 0.5, and add the implementation to
  * TAGContainerOpenerNotifier::containerAvailable: for handling the container
  * available notification.
@@ -100,14 +100,14 @@ typedef enum {
 // @cond
 /**
  * TAGContainerOpener should not be instantiated directly. Use
- * openContainerWithId:tagManager:timeout:openType:
- * or openContainerWithId:tagManager::timeout:openType:notifier:.
+ * containerOpenWithId:tagManager:timeout:openType:
+ * or containerOpenWithId:tagManager::timeout:openType:notifier:.
  */
 - (id)init __attribute__((unavailable));
 // @endcond
 
 /**
- * Note: This method is deprecated.  Use the notifier version of openContainerWithId.
+ * Note: This method is deprecated.  Use the notifier version of containerOpenWithId.
  *
  * Waits up to <code>timeout</code> seconds for a container to be loaded
  * (non default or fresh depending on the specified <code>openType</code>)
@@ -138,7 +138,7 @@ typedef enum {
  * If a network error occurs or the timer expires, TAGContainerFuture::get
  * may contain defaults or a stale saved container.
  *
- * <p>If you call one of the openContainer methods a second time with a
+ * <p>If you call one of the containerOpen methods a second time with a
  * given <code>containerId</code>, a <code>TAGContainerFuture</code> will be
  * returned whose TAGContainerFuture::get will return the same container as
  * the first call did.
@@ -153,11 +153,11 @@ typedef enum {
  *     and return the container when it is available.
  */
 + (id<TAGContainerFuture>)
-    openContainerWithId:(NSString *)containerId
+    containerOpenWithId:(NSString *)containerId
              tagManager:(TAGManager *)tagManager
                openType:(TAGOpenType)openType
                 timeout:(NSTimeInterval *)timeout
-__attribute__((deprecated("Use The notifier version of TAGContainerOpener openContainerWithId.")));
+__attribute__((deprecated("Use The notifier version of TAGContainerOpener containerOpenWithId.")));
 
 /**
  * Waits up to <code>timeout</code> seconds for a container to be loaded
@@ -189,7 +189,7 @@ __attribute__((deprecated("Use The notifier version of TAGContainerOpener openCo
  * If a network error occurs or the timer expires, the container passed into
  * the notifier may contain defaults or a stale saved container.
  *
- * <p>If you call one of the openContainer methods a second time with a
+ * <p>If you call one of the containerOpen methods a second time with a
  * given <code>containerId</code>, the same container returned from the
  * previous call will be passed into the notifier as soon as
  * it's available.
@@ -206,7 +206,7 @@ __attribute__((deprecated("Use The notifier version of TAGContainerOpener openCo
  *     a non-fresh container. Note that the notifier may be called from a
  *     different thread.
  */
-+ (void) openContainerWithId:(NSString *)containerId
++ (void) containerOpenWithId:(NSString *)containerId
                   tagManager:(TAGManager *)tagManager
                     openType:(TAGOpenType)openType
                      timeout:(NSTimeInterval *)timeout

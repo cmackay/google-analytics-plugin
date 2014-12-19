@@ -187,7 +187,7 @@ analytics.close(success, error);
 // Google Tag manager related functions
 //
 // Google tag manager requires the default container included in the project. Currently
-// it is not implemented in the plugin therefore GTM always starts with an empty container 
+// it is not implemented in the plugin therefore GTM always starts with an empty container
 // and retrieves the container instance from the network. I.e. the container can not be used
 // until it can be retrieved from the net.
 // If you want to provide default container then include it in the project as a plist, json
@@ -198,26 +198,14 @@ analytics.close(success, error);
 //
 // Opens google tag manager container
 //
-// containerId - String   (required) 
-//   - the id of the container to be opened. The id is a string value in the form of 'GTM-XXXXXX'. 
+// containerId - String   (required)
+//   - the id of the container to be opened. The id is a string value in the form of 'GTM-XXXXXX'.
 // success     - Function (required)
 //   - async callback invoked when the container is successfully opened
 // error       - Function (required)
 //   - failure callback, it has a single argument what contains the error message
 //
-analytics.openContainer: function (containerId, success, error);
-
-//
-// Closes an already opened google tag manager container
-// This results that the container will not be refreshed anymore
-// Further requests on the container will fail until the container reopened
-//
-// success     - Function (required)
-//   - async callback invoked when the container is successfully closed
-// error       - Function (required)
-//   - failure callback, it has a single argument what contains the error message
-//
-analytics.closeContainer: function (success, error);
+analytics.tm.container.open: function (containerId, success, error);
 
 //
 // Refreshes and already opened google tag manager container from the network
@@ -227,22 +215,26 @@ analytics.closeContainer: function (success, error);
 // error       - Function (required)
 //   - failure callback, it has a single argument what contains the error message
 //
-analytics.refreshContainer: function(success, error);
+analytics.tm.container.refresh: function(success, error);
 
 //
 // Gets a macro value from the container (respectively)
 //
-// key        - String   (required) 
-//   - the macro key to get value for 
+// key        - String   (required)
+//   - the macro key to get value for
 // success     - Function (required)
 //   - async callback returning the value of the macro
 // error       - Function (required)
 //   - failure callback, it has a single argument what contains the error message
 //
-analytics.getConfigStringValue: function(key, success, error);
-analytics.getConfigStringValue: function(key, success, error);       
-analytics.getConfigBoolValue: function(key, success, error);           
-analytics.getConfigIntValue: function(key, success, error);          
-analytics.getConfigFloatValue: function(key, success, error);
-               
+analytics.tm.container.getString: function(key, success, error);
+analytics.tm.container.getBoolean: function(key, success, error);
+analytics.tm.container.getDouble: function(key, success, error);
+analytics.tm.container.getLong: function(key, success, error);
+
+analytics.tm.datalayer.get: function(key, success, error);
+analytics.tm.datalayer.push: function(keyOrObject, optValue, success, error);
+analytics.tm.datalayer.pushEvent: function(eventName, optUpdates, success, error);
+
+
 ```

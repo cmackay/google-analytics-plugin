@@ -32,11 +32,11 @@
 @property(nonatomic, retain) TAGContainer *container;
 @property (nonatomic, strong) NSString* containerOpenedCallbackId;
 
-- (void) openContainer: (CDVInvokedUrlCommand*)command;
-- (void) getConfigStringValue: (CDVInvokedUrlCommand*)command;
-- (void) getConfigBoolValue: (CDVInvokedUrlCommand*)command;
-- (void) getConfigIntValue: (CDVInvokedUrlCommand*)command;
-- (void) getConfigFloatValue: (CDVInvokedUrlCommand*)command;
+- (void) containerOpen: (CDVInvokedUrlCommand*)command;
+- (void) getContainerString: (CDVInvokedUrlCommand*)command;
+- (void) getContainerBoolean: (CDVInvokedUrlCommand*)command;
+- (void) getContainerLong: (CDVInvokedUrlCommand*)command;
+- (void) getContainerDouble: (CDVInvokedUrlCommand*)command;
 - (void) getDatalayer: (CDVInvokedUrlCommand*)command;
 - (void) dataLayerPush: (CDVInvokedUrlCommand*)command;
 - (void) setTrackingId: (CDVInvokedUrlCommand*)command;

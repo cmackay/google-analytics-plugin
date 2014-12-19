@@ -27,6 +27,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 
 import com.google.android.gms.tagmanager.ContainerHolder;
 import com.google.android.gms.tagmanager.TagManager;
+import com.google.android.gms.tagmanager.DataLayer;
 
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
@@ -50,6 +51,7 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
 
   private static TagManager tm;
   private static ContainerHolder containerHolder;
+  private static DataLayer dataLayer;
 
   private static final int GA_DISPATCH_PERIOD = 1;
 
@@ -67,8 +69,9 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
     ga = GoogleAnalytics.getInstance(cordova.getActivity());
     ga.setLocalDispatchPeriod(GA_DISPATCH_PERIOD);
 
-    // initialize tag tagmanager
+    // initialize tag tagmanager and data layer
     tm = TagManager.getInstance(cordova.getActivity());
+    dataLayer = tm.getDataLayer();
   }
 
   /**
@@ -111,24 +114,36 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
       close(rawArgs, callback);
       return true;
 
-    } else if ("openContainer".equals(action)) {
-      openContainer(rawArgs, callback);
+    } else if ("containerOpen".equals(action)) {
+      containerOpen(rawArgs, callback);
       return true;
 
-    } else if ("getConfigStringValue".equals(action)) {
-      getConfigStringValue(rawArgs, callback);
+    } else if ("getContainerString".equals(action)) {
+      getContainerString(rawArgs, callback);
       return true;
 
-    } else if ("getConfigBoolValue".equals(action)) {
-      getConfigBoolValue(rawArgs, callback);
+    } else if ("getContainerBoolean".equals(action)) {
+      getContainerBoolean(rawArgs, callback);
       return true;
 
-    } else if ("getConfigIntValue".equals(action)) {
-      getConfigIntValue(rawArgs, callback)));
+    } else if ("getContainerLong".equals(action)) {
+      getContainerLong(rawArgs, callback);
       return true;
 
-    } else if ("getConfigFloatValue".equals(action)) {
-      getConfigFloatValue(rawArgs, callback);
+    } else if ("getContainerDouble".equals(action)) {
+      getContainerDouble(rawArgs, callback);
+      return true;
+
+    } else if ("dataLayerValue".equals(action)) {
+      dataLayerValue(rawArgs, callback);
+      return true;
+
+    } else if ("dataLayerPush".equals(action)) {
+      dataLayerPush(rawArgs, callback);
+      return true;
+
+    } else if ("dataLayerPushEvent".equals(action)) {
+      dataLayerPushEvent(rawArgs, callback);
       return true;
     }
     return false;
@@ -211,7 +226,7 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
         if (plugin.hasTracker(callback)) {
           try {
             JSONArray args = new JSONArray(rawArgs);
-            plugin.tracker.send(objectToMap(args.getJSONObject(0)));
+            plugin.tracker.send(toStringMap(args.getJSONObject(0)));
             callback.success();
           } catch (JSONException e) {
             callback.error(e.toString());
@@ -244,7 +259,7 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
     return true;
   }
 
-  private void openContainer(final String rawArgs, final CallbackContext callback) {
+  private void containerOpen(final String rawArgs, final CallbackContext callback) {
     cordova.getThreadPool().execute(new Runnable() {
 
       public void run() {
@@ -252,9 +267,9 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
           String containerId = new JSONArray(rawArgs).getString(0);
 
           tm.loadContainerPreferFresh(containerId, -1)
-            .setResultCallback(new ResultCallback<ContextHolder>() {
+            .setResultCallback(new ResultCallback<ContainerHolder>() {
 
-              public void run(ContainerHolder holder) {
+              public void onResult(ContainerHolder holder) {
                 if (holder.getStatus().isSuccess()) {
                   containerHolder = holder;
                   containerHolder.refresh();
@@ -272,57 +287,150 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
       });
   }
 
-  private void getConfigStringValue(String rawArgs, CallbackContext callback) {
+  private void getContainerString(String rawArgs, CallbackContext callback) {
     if (hasContainer(callback)) {
       try {
         String key = new JSONArray(rawArgs).getString(0);
         String value = containerHolder.getContainer().getString(key);
         callback.success(value);
+
       } catch (JSONException e) {
         callback.error(e.toString());
       }
     }
   }
 
-  private void getConfigBoolValue(String rawArgs, CallbackContext callback) {
+  private void getContainerBoolean(String rawArgs, CallbackContext callback) {
     if (hasContainer(callback)) {
       try {
         String key = new JSONArray(rawArgs).getString(0);
         boolean value = containerHolder.getContainer().getBoolean(key);
-        callback.success(value);
+        callback.sendPluginResult(new PluginResult(
+          PluginResult.Status.OK, value));
+
       } catch (JSONException e) {
         callback.error(e.toString());
       }
     }
   }
 
-  private void getConfigIntValue(String rawArgs, CallbackContext callback) {
+  private void getContainerLong(String rawArgs, CallbackContext callback) {
     if (hasContainer(callback)) {
       try {
         String key = new JSONArray(rawArgs).getString(0);
         long value = containerHolder.getContainer().getLong(key);
-        callback.success(value);
+        callback.sendPluginResult(new PluginResult(
+          PluginResult.Status.OK, value));
+
       } catch (JSONException e) {
         callback.error(e.toString());
       }
     }
   }
 
-  private void getConfigFloatValue(String rawArgs, CallbackContext callback) {
+  private void getContainerDouble(String rawArgs, CallbackContext callback) {
     if (hasContainer(callback)) {
       try {
         String key = new JSONArray(rawArgs).getString(0);
         double value = containerHolder.getContainer().getDouble(key);
-        callback.success(value);
+        callback.sendPluginResult(new PluginResult(
+          PluginResult.Status.OK, (float) value));
+
       } catch (JSONException e) {
         callback.error(e.toString());
       }
     }
   }
 
+  private void dataLayerValue(final String rawArgs, final CallbackContext callback) {
+    cordova.getThreadPool().execute(new Runnable() {
+
+      public void run() {
+        try {
+          String key = new JSONArray(rawArgs).getString(0);
+          Object value = dataLayer.get(key);
+          PluginResult result;
+          if (value == null) {
+            result = new PluginResult(PluginResult.Status.OK, (String) null);
+
+          } else if (value instanceof Map) {
+            result = new PluginResult(
+              PluginResult.Status.OK, new JSONObject((Map)value));
+
+          } else if (value instanceof Double || value instanceof Float) {
+            result = new PluginResult(
+              PluginResult.Status.OK, ((Number) value).floatValue());
+
+          } else if (value instanceof Long || value instanceof Integer) {
+            result = new PluginResult(
+              PluginResult.Status.OK, ((Number) value).intValue());
+
+          } else if (value instanceof Boolean) {
+            result = new PluginResult(
+              PluginResult.Status.OK, ((Boolean) value).booleanValue());
+
+          } else {
+            result = new PluginResult(PluginResult.Status.OK, value.toString());
+
+          }
+          callback.sendPluginResult(result);
+        } catch (JSONException e) {
+          callback.error(e.toString());
+        }
+      }
+
+    });
+  }
+
+  private void dataLayerPush(final String rawArgs, final CallbackContext callback) {
+    cordova.getThreadPool().execute(new Runnable() {
+
+      public void run() {
+        try {
+          JSONArray args = new JSONArray(rawArgs);
+
+          if (args.optJSONObject(0) != null) {
+            dataLayer.push(toMap(args.getJSONObject(0)));
+
+          } else {
+            String key = args.getString(0);
+            Object value = args.opt(1);
+            dataLayer.push(key, value);
+          }
+
+          callback.success();
+
+        } catch (JSONException e) {
+          callback.error(e.toString());
+        }
+      }
+
+    });
+  }
+
+  private void dataLayerPushEvent(final String rawArgs, final CallbackContext callback) {
+    cordova.getThreadPool().execute(new Runnable() {
+
+      public void run() {
+        try {
+          JSONArray args = new JSONArray(rawArgs);
+
+          String eventName = args.getString(0);
+          Map<String, Object> updates = toMap(args.optJSONObject(1));
+
+          dataLayer.pushEvent(eventName, updates);
+          callback.success();
+        } catch (JSONException e) {
+          callback.error(e.toString());
+        }
+      }
+
+    });
+  }
+
   private boolean hasContainer(CallbackContext callback) {
     if (containerHolder == null) {
-      callback.error("Container not initialized. Call openContainer prior to using container.");
+      callback.error("Container not initialized. Call containerOpen prior to using container.");
       return false;
     }
     if (!containerHolder.getStatus().isSuccess()) {
@@ -333,8 +441,8 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
     return true;
   }
 
-  private static Map<String, String> objectToMap(JSONObject o) throws JSONException {
-    if (o.length() == 0) {
+  private static Map<String, String> toStringMap(JSONObject o) throws JSONException {
+    if (o == null || o.length() == 0) {
       return Collections.<String, String>emptyMap();
     }
     Map<String, String> map = new HashMap<String, String>(o.length());
@@ -343,6 +451,22 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
     while (it.hasNext()) {
       key = it.next().toString();
       value = o.has(key) ? o.get(key).toString(): null;
+      map.put(key, value);
+    }
+    return map;
+  }
+
+  private static Map<String, Object> toMap(JSONObject o) throws JSONException {
+    if (o == null || o.length() == 0) {
+      return Collections.<String, Object>emptyMap();
+    }
+    Map<String, Object> map = new HashMap<String, Object>(o.length());
+    Iterator it = o.keys();
+    String key;
+    Object value;
+    while (it.hasNext()) {
+      key = it.next().toString();
+      value = o.has(key) ? o.get(key): null;
       map.put(key, value);
     }
     return map;

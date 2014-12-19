@@ -47,7 +47,7 @@ typedef NS_ENUM(NSUInteger, TAGDispatchResult) {
  * Sample usage:
 <pre>
  *      TAGContainer *container =
- *          [[TAGManager instance] openContainerById:myContainerId];
+ *          [[TAGManager instance] containerOpenById:myContainerId];
  *      NSString *value = [container stringForKey:@"myKey"];
  *
  *      TAGDataLayer *dataLayer =
@@ -88,7 +88,7 @@ typedef NS_ENUM(NSUInteger, TAGDispatchResult) {
  * should be placed as a resource in the bundle with name
  * <code>containerId</code> where <code>containerId</code> is the same container
  * ID you will use within this API. When you call
- * TAGManager::openContainerById:callback:, the container will be
+ * TAGManager::containerOpenById:callback:, the container will be
  * returned with those bundled rules/tags/macros. You will create the container
  * in the UI and use the Download button to download it.
  *
@@ -99,15 +99,15 @@ typedef NS_ENUM(NSUInteger, TAGDispatchResult) {
  * value will be computed using the most recent rules.
  *
  * The downloaded container is saved locally. When you call
- * TAGManager::openContainerById:callback:, it will first load the default
+ * TAGManager::containerOpenById:callback:, it will first load the default
  * container, and will then asynchronously load any saved container. If none is
  * found or if it is older than 12 hours, it will try to retrieve a newer version
  * from the network. You can find the status of those asynchronous loads by
- * passing a TAGContainerCallback to TAGManager::openContainerById:callback:.
+ * passing a TAGContainerCallback to TAGManager::containerOpenById:callback:.
  *
  * Sometimes you may want to block until either a non-default container is
  * available, or until a recent fresh container is available. You can do that
- * by  using the callbacks in TAGManager::openContainerById:callback: or use
+ * by  using the callbacks in TAGManager::containerOpenById:callback: or use
  * TAGContainerOpener.
  *
  * When you are finished with a container, call TAGContainer::close.
@@ -142,12 +142,12 @@ typedef NS_ENUM(NSUInteger, TAGDispatchResult) {
  * there is no network connection during the lifetime of the container.
  *
  * Callback will be called as various things happen for
- * the container. At a minimum, TAGManager::openContainerById:callback: will
+ * the container. At a minimum, TAGManager::containerOpenById:callback: will
  * attempt to load a saved version of the container. If there is no saved
  * version, or if the saved version is out of date, attempt will be made to
  * load from the network.
  *
- * If TAGManager::openContainerById:callback: is called a second time for a
+ * If TAGManager::containerOpenById:callback: is called a second time for a
  * given <code>containerId</code>, <code>nil</code> will be returned unless
  * the previous opened container has already been closed.
  *
@@ -155,10 +155,10 @@ typedef NS_ENUM(NSUInteger, TAGDispatchResult) {
  * @param callback An object whose various methods will be called during the
  *     loading process. Note that the methods may be called from different
  *     threads. In addition, they may be called before
- *     TAGManager::openContainerById:callback: returns.
+ *     TAGManager::containerOpenById:callback: returns.
  * @return The opened container.
  */
-- (TAGContainer *)openContainerById:(NSString *)containerId
+- (TAGContainer *)containerOpenById:(NSString *)containerId
                            callback:(id <TAGContainerCallback>)callback;
 
 /**

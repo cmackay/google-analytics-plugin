@@ -131,7 +131,7 @@
 }
 
 
-- (void) openContainer: (CDVInvokedUrlCommand*)command
+- (void) containerOpen: (CDVInvokedUrlCommand*)command
 {
   NSString* containerId = [command.arguments objectAtIndex:0];
   self.tagManager = [TAGManager instance];
@@ -149,7 +149,7 @@
   * @param timeout The timeout period (default is 2.0 seconds).
   * @param notifier The notifier to inform on container load events.
   */
-  [TAGContainerOpener openContainerWithId:containerId   // Update with your Container ID.
+  [TAGContainerOpener containerOpenWithId:containerId   // Update with your Container ID.
   tagManager:self.tagManager
   openType:kTAGOpenTypePreferFresh
   timeout:nil
@@ -162,7 +162,7 @@
 * Refresh an already opened container
 *
 **/
-- (void) refreshContainer: (CDVInvokedUrlCommand*)command
+- (void) containerRefresh: (CDVInvokedUrlCommand*)command
 {
   CDVPluginResult* result = nil;
 
@@ -178,11 +178,11 @@
 
 /**
 *
-* TAGContainerOpenerNotifier callback. This will be called then openContainerWithId
+* TAGContainerOpenerNotifier callback. This will be called then containerOpenWithId
 * returns with the container
 *
 */
-- (void)containerAvailable:(TAGContainer *)container {
+- (void) containerAvailable:(TAGContainer *)container {
   //
   // Note that containerAvailable may be called on any thread, so you may need to dispatch back to
   // your main thread.
@@ -198,7 +198,7 @@
 * Get GTM config value for the passed in key
 *
 */
-- (void) getConfigStringValue: (CDVInvokedUrlCommand*)command
+- (void) getContainerString: (CDVInvokedUrlCommand*)command
 {
   CDVPluginResult* result = nil;
   NSString* key = [command.arguments objectAtIndex:0];
@@ -214,7 +214,7 @@
   [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
 }
 
-- (void) getConfigBoolValue: (CDVInvokedUrlCommand*)command
+- (void) getContainerBoolean: (CDVInvokedUrlCommand*)command
 {
   CDVPluginResult* result = nil;
   NSString* key = [command.arguments objectAtIndex:0];
@@ -230,7 +230,7 @@
   [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
 }
 
-- (void) getConfigIntValue: (CDVInvokedUrlCommand*)command
+- (void) getContainerLong: (CDVInvokedUrlCommand*)command
 {
   CDVPluginResult* result = nil;
   NSString* key = [command.arguments objectAtIndex:0];
@@ -246,7 +246,7 @@
   [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
 }
 
-- (void) getConfigFloatValue: (CDVInvokedUrlCommand*)command
+- (void) getContainerDouble: (CDVInvokedUrlCommand*)command
 {
   CDVPluginResult* result = nil;
   NSString* key = [command.arguments objectAtIndex:0];
