@@ -127,6 +127,11 @@ Analytics.prototype = {
     exec(success, error, 'GoogleAnalytics', 'setTrackingId', [trackingId]);
   },
 
+  setDispatchInterval: function (seconds, success, error) {
+    argscheck.checkArgs('nFF', 'analytics.setDispatchInterval', arguments);
+    exec(success, error, 'GoogleAnalytics', 'setDispatchInterval', [seconds]);
+  },
+
   setLogLevel: function (logLevel, success, error) {
     argscheck.checkArgs('nFF', 'analytics.setLogLevel', arguments);
     if (platform.id === 'ios') {

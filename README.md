@@ -68,6 +68,13 @@ analytics.LogLevel(VERBOSE, INFO, WARNING, ERROR)
 //  error       - Function  (optional)
 analytics.setTrackingId(trackingId, success, error);
 
+// Sets the dispatching interval
+//
+//  seconds     - Number    (required)
+//  success     - Function  (optional)
+//  error       - Function  (optional)
+analytics.setDispatchInterval(seconds, success, error);
+
 // Sets the log level
 //
 //  logLevel    - Number    (required)
