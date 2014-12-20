@@ -29,7 +29,6 @@
   CDVPluginResult* result = nil;
   NSString* trackingId = [command.arguments objectAtIndex:0];
 
-  [GAI sharedInstance].dispatchInterval = 1;
   [GAI sharedInstance].trackUncaughtExceptions = YES;
 
   if (tracker) {
@@ -37,6 +36,17 @@
   }
 
   tracker = [[GAI sharedInstance] trackerWithTrackingId:trackingId];
+  result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+
+  [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+}
+
+- (void) setDispatchInterval: (CDVInvokedUrlCommand*)command
+{
+  CDVPluginResult* result = nil;
+  NSTimeInterval dispatchInterval = [[command.arguments objectAtIndex:0] unsignedLongValue];
+
+  [GAI sharedInstance].dispatchInterval = dispatchInterval;
   result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 
   [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];

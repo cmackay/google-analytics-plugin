@@ -42,13 +42,6 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
   private static GoogleAnalytics ga;
   private static Tracker tracker;
 
-  private static final int GA_DISPATCH_PERIOD = 10;
-
-  private void initializeGa() {
-    ga = GoogleAnalytics.getInstance(cordova.getActivity());
-    ga.setLocalDispatchPeriod(GA_DISPATCH_PERIOD);
-  }
-
   /**
    * Initializes the plugin
    *
@@ -58,7 +51,7 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
   @Override
   public void initialize(CordovaInterface cordova, CordovaWebView webView) {
     super.initialize(cordova, webView);
-    initializeGa();
+    ga = GoogleAnalytics.getInstance(cordova.getActivity());
   }
 
   /**
@@ -66,50 +59,66 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
    *
    * @param action          The action to execute.
    * @param args            The exec() arguments.
-   * @param callbackContext The callback context used when calling back into JavaScript.
+   * @param callback        The callback context used when calling back into JavaScript.
    * @return                Whether the action was valid.
    */
   @Override
-  public boolean execute(String action, final String rawArgs, final CallbackContext callbackContext) throws JSONException {
+  public boolean execute(String action, String rawArgs, CallbackContext callback)
+    throws JSONException {
+
     if ("setTrackingId".equals(action)) {
-      setTrackingId(rawArgs, callbackContext);
+      setTrackingId(rawArgs, callback);
+      return true;
+
+    } else if ("setDispatchInterval".equals(action)) {
+      setDispatchInterval(rawArgs, callback);
       return true;
 
     } else if ("setLogLevel".equals(action)) {
-      setLogLevel(rawArgs, callbackContext);
+      setLogLevel(rawArgs, callback);
       return true;
 
     } else if ("setIDFAEnabled".equals(action)) {
-      setIDFAEnabled(rawArgs, callbackContext);
+      setIDFAEnabled(rawArgs, callback);
       return true;
 
     } else if ("get".equals(action)) {
-      get(rawArgs, callbackContext);
+      get(rawArgs, callback);
       return true;
 
     } else if ("set".equals(action)) {
-      set(rawArgs, callbackContext);
+      set(rawArgs, callback);
       return true;
 
     } else if ("send".equals(action)) {
-      send(rawArgs, callbackContext);
+      send(rawArgs, callback);
       return true;
 
     } else if ("close".equals(action)) {
-      close(rawArgs, callbackContext);
+      close(rawArgs, callback);
       return true;
     }
+
     return false;
   }
 
-  private void setTrackingId(String rawArgs, CallbackContext callbackContext) {
+  private void setTrackingId(String rawArgs, CallbackContext callback) {
     try {
       tracker = ga.newTracker(new JSONArray(rawArgs).getString(0));
       // setup uncaught exception handler
       tracker.enableExceptionReporting(true);
-      callbackContext.success();
+      callback.success();
     } catch (JSONException e) {
-      callbackContext.error(e.toString());
+      callback.error(e.toString());
+    }
+  }
+
+  private void setDispatchInterval(String rawArgs, CallbackContext callback) {
+    try {
+      ga.setLocalDispatchPeriod(new JSONArray(rawArgs).getInt(0));
+      callback.success();
+    } catch (JSONException e) {
+      callback.error(e.toString());
     }
   }
 
