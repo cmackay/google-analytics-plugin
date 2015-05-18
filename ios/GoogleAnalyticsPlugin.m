@@ -149,7 +149,7 @@
   * @param timeout The timeout period (default is 2.0 seconds).
   * @param notifier The notifier to inform on container load events.
   */
-  [TAGContainerOpener containerOpenWithId:containerId   // Update with your Container ID.
+  [TAGContainerOpener openContainerWithId:containerId   // Update with your Container ID.
   tagManager:self.tagManager
   openType:kTAGOpenTypePreferFresh
   timeout:nil
@@ -178,7 +178,7 @@
 
 /**
 *
-* TAGContainerOpenerNotifier callback. This will be called then containerOpenWithId
+* TAGContainerOpenerNotifier callback. This will be called then openContainerWithId
 * returns with the container
 *
 */
