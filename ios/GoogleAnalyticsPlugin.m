@@ -26,7 +26,9 @@
 #import "TAGManager.h"
 #import "TAGDataLayer.h"
 
-@interface GoogleAnalyticsPlugin ()<TAGContainerOpenerNotifier>
+
+
+@interface GoogleAnalyticsPlugin ()<TAGContainerCallback>
 @end
 
 @implementation GoogleAnalyticsPlugin
@@ -131,30 +133,34 @@
 }
 
 
+/******************************************************************************************
+ *
+ * Google Tag Manager related functions
+ *
+ ****************************************************************************************/
+
 - (void) containerOpen: (CDVInvokedUrlCommand*)command
 {
-  NSString* containerId = [command.arguments objectAtIndex:0];
-  self.tagManager = [TAGManager instance];
-  self.containerOpenedCallbackId = command.callbackId;
+    NSString* containerId = [command.arguments objectAtIndex:0];
+    self.tagManager = [TAGManager instance];
+    self.containerOpenedCallbackId = command.callbackId;
 
-  // Optional: Change the LogLevel to Verbose to enable logging at VERBOSE and higher levels.
-  [self.tagManager.logger setLogLevel:kTAGLoggerLogLevelVerbose];
+    // Optional: Change the LogLevel to Verbose to enable logging at VERBOSE and higher levels.
+    [self.tagManager.logger setLogLevel:kTAGLoggerLogLevelVerbose];
 
-  /*
-  * Opens a container.
-  *
-  * @param containerId The ID of the container to load.
-  * @param tagManager The TAGManager instance for getting the container.
-  * @param openType The choice of how to open the container.
-  * @param timeout The timeout period (default is 2.0 seconds).
-  * @param notifier The notifier to inform on container load events.
-  */
-  [TAGContainerOpener openContainerWithId:containerId   // Update with your Container ID.
-  tagManager:self.tagManager
-  openType:kTAGOpenTypePreferFresh
-  timeout:nil
-  notifier:self];
-
+    /**
+     * we could open the container by the TAGContainerOpener however the callback handling 
+     * for that is not so sophisticated as the openContainerById:callback call so we rather 
+     * use that here
+     *
+    [TAGContainerOpener openContainerWithId:containerId   // Update with your Container ID.
+    tagManager:self.tagManager
+    openType:kTAGOpenTypePreferNonDefault
+    timeout:&timeout
+    notifier:self];
+    */
+    
+    [self.tagManager openContainerById:containerId callback:self];
 }
 
 /**
@@ -164,34 +170,74 @@
 **/
 - (void) containerRefresh: (CDVInvokedUrlCommand*)command
 {
-  CDVPluginResult* result = nil;
+    CDVPluginResult* result = nil;
+    self.containerOpenedCallbackId = command.callbackId;
 
-  if (!self.container) {
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"container not opened"];
-  } else {
-    [self.container refresh];
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Refreshed"];
-  }
+    if (!self.container) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"container not opened"];
+        [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+    } else {
+        [self.container refresh];
+    }
 
-  [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+}
+
+
+
+//>-----
+
+/**
+ * Called before the refresh is about to begin.
+ *
+ * @param container The container being refreshed.
+ * @param refreshType The type of refresh which is starting.
+ */
+- (void)containerRefreshBegin:(TAGContainer *)container
+                  refreshType:(TAGContainerCallbackRefreshType)refreshType {
+    // Notify UI that container refresh is beginning.
+    NSLog(@"GTM: refresh begin");
 }
 
 /**
-*
-* TAGContainerOpenerNotifier callback. This will be called then openContainerWithId
-* returns with the container
-*
-*/
-- (void) containerAvailable:(TAGContainer *)container {
-  //
-  // Note that containerAvailable may be called on any thread, so you may need to dispatch back to
-  // your main thread.
-  //
-  dispatch_async(dispatch_get_main_queue(), ^{
-    self.container = container;
-    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:self.containerOpenedCallbackId];
-  });
+ * Called when a refresh has successfully completed for the given refresh type.
+ *
+ * @param container The container being refreshed.
+ * @param refreshType The type of refresh which completed successfully.
+ */
+- (void)containerRefreshSuccess:(TAGContainer *)container
+                    refreshType:(TAGContainerCallbackRefreshType)refreshType {
+    // Notify UI that container is available.
+    NSLog(@"GTM: refresh done");
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.container = container;
+        [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:self.containerOpenedCallbackId];
+    });
 }
+
+/**
+ * Called when a refresh has failed to complete for the given refresh type.
+ *
+ * @param container The container being refreshed.
+ * @param failure The reason for the refresh failure.
+ * @param refreshType The type of refresh which failed.
+ */
+- (void)containerRefreshFailure:(TAGContainer *)container
+                        failure:(TAGContainerCallbackRefreshFailure)failure
+                    refreshType:(TAGContainerCallbackRefreshType)refreshType {
+    // Notify UI that container request has failed.
+    
+    NSLog(@"GTM: refresh failed %u", refreshType);
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (failure != kTAGContainerCallbackRefreshFailureNoSavedContainer) {
+            self.container = container;
+            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR] callbackId:self.containerOpenedCallbackId];
+        }
+    });
+}
+
+// >------
 
 /**
 *
@@ -263,3 +309,5 @@
 }
 
 @end
+
+
