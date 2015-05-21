@@ -232,9 +232,32 @@ analytics.tm.container.getBoolean(key, success, error);
 analytics.tm.container.getDouble(key, success, error);
 analytics.tm.container.getLong(key, success, error);
 
+//
+// Deal with datalayer variables
+//
+
+//
+// Get value of a datalayer variable
+//
+// key      - String
+//      - the variable name to get. It can be a single value or a dot separated list of path
+//        e.g. in case of a variable {a:{b:{c:'foo'}}} 'a.b.c' key will result 'foo' to be returned
+// success  - Function  [required]
+//      - the single parameter received by this callback is the value associated with the given key.
+//        This value can be either a string or an object. E.g. for the above example for 'a.b.c.'
+//        it returns 'foo' for the key 'a' it returns {b:{c:'foo'}}
+//
 analytics.tm.datalayer.get(key, success, error);
+
+//
+// Push a value to the datalayer
+//
+// keyOrObject  - String/Object [required]
+//      - Either a key (if second parameter is the value) or an key-value pari object.
+// optValue     - String
+//        - value to set for the given key
+//
 analytics.tm.datalayer.push(keyOrObject, optValue, success, error);
-analytics.tm.datalayer.pushEvent(eventName, optUpdates, success, error);
 
 
 ```
