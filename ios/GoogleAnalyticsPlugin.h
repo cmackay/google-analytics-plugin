@@ -43,5 +43,8 @@
 - (void) set: (CDVInvokedUrlCommand*)command;
 - (void) send: (CDVInvokedUrlCommand*)command;
 - (void) close: (CDVInvokedUrlCommand*)command;
+- (void) dataLayerValue: (CDVInvokedUrlCommand*)command;
+- (void) dataLayerPush: (CDVInvokedUrlCommand*)command;
+- (void) dataLayerPushValue: (CDVInvokedUrlCommand*)command;
 
 @end

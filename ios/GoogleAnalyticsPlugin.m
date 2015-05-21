@@ -308,6 +308,86 @@
   [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
 }
 
+- (void) dataLayerValue: (CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* result = nil;
+    NSString* key = [command.arguments objectAtIndex:0];
+    TAGDataLayer *dataLayer = [TAGManager instance].dataLayer;
+    
+    if (!dataLayer) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"datalayer not found"];
+    } else {
+        NSObject *value = [dataLayer get:key];
+        if (!value) {
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@""];
+        } else {
+            //
+            // Value can be sting/dictionary
+            //
+            if ([value isKindOfClass:[NSString class]]) {
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[NSString stringWithFormat:@"%@", value]];
+            } else {
+                NSError *error;
+                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:value
+                                                                   options:NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
+                                                                     error:&error];
+                
+                if (! jsonData) {
+                    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
+                } else {
+                    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+                    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:jsonString];
+                }
+            }
+
+        }
+    
+    }
+    
+    [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+    }
+
+- (void) dataLayerPushValue: (CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* result = nil;
+    NSString* key = [command.arguments objectAtIndex:0];
+    NSString* value = [command.arguments objectAtIndex:1];
+    TAGDataLayer *dataLayer = [TAGManager instance].dataLayer;
+    
+    if (!dataLayer) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"datalayer not found"];
+    } else {
+        [dataLayer push:@{key: value}];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    }
+    [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+    
+}
+
+
+- (void) dataLayerPush: (CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* result = nil;
+    NSString* jsonString = [command.arguments objectAtIndex:0];
+    TAGDataLayer *dataLayer = [TAGManager instance].dataLayer;
+    
+    if (!dataLayer) {
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"datalayer not found"];
+    } else {
+        NSError *error;
+        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:&error];
+        
+        if (! dictionary) {
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
+        } else {
+            [dataLayer push:dictionary];
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        }
+    }
+    [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+
+}
+
 @end
 
 
