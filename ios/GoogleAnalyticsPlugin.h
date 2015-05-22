@@ -37,13 +37,14 @@
 - (void) getContainerBoolean: (CDVInvokedUrlCommand*)command;
 - (void) getContainerLong: (CDVInvokedUrlCommand*)command;
 - (void) getContainerDouble: (CDVInvokedUrlCommand*)command;
-- (void) getDatalayer: (CDVInvokedUrlCommand*)command;
-- (void) dataLayerPush: (CDVInvokedUrlCommand*)command;
 - (void) setTrackingId: (CDVInvokedUrlCommand*)command;
 - (void) setLogLevel: (CDVInvokedUrlCommand*)command;
 - (void) get: (CDVInvokedUrlCommand*)command;
 - (void) set: (CDVInvokedUrlCommand*)command;
 - (void) send: (CDVInvokedUrlCommand*)command;
 - (void) close: (CDVInvokedUrlCommand*)command;
+- (void) dataLayerValue: (CDVInvokedUrlCommand*)command;
+- (void) dataLayerPush: (CDVInvokedUrlCommand*)command;
+- (void) dataLayerPushValue: (CDVInvokedUrlCommand*)command;
 
 @end
