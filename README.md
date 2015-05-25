@@ -82,13 +82,6 @@ analytics.setDispatchInterval(seconds, success, error);
 //  error       - Function  (optional)
 analytics.setLogLevel(logLevel, success, error);
 
-// Sets whether the advertising id and ad targeting preference should be collected
-// (only enabled for Android since it can cause apps to be rejected from app store)
-//
-//  success     - Function  (optional)
-//  error       - Function  (optional)
-analytics.enableAdvertisingIdCollection(success, error);
-
 // Turns on IDFA collection to get demographic data in GA
 //
 //  screenName  - String    (required)
