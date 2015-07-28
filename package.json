@@ -1,0 +1,35 @@
+{
+  "name": "com.cmackay.plugins.googleanalytics",
+  "version": "0.1.15",
+  "description": "Plugin for Google Analytics Native SDKs (Android, iOS)",
+  "cordova": {
+    "id": "com.cmackay.plugins.googleanalytics",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmackay/google-analytics-plugin.git"
+  },
+  "keywords": [
+    "cordova",
+    "analytics",
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "author": "Craig MacKay",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/cmackay/google-analytics-plugin/issues"
+  },
+  "homepage": "https://github.com/cmackay/google-analytics-plugin#readme"
+}
