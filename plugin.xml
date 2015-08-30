@@ -19,8 +19,6 @@
     <clobbers target="navigator.analytics" />
   </js-module>
 
-  <dependency id="com.google.playservices" />
-
   <platform name="ios">
     <config-file target="config.xml" parent="/*">
       <feature name="GoogleAnalytics">
@@ -65,6 +63,8 @@
     </config-file>
 
     <source-file src="android/GoogleAnalyticsPlugin.java" target-dir="src/com/cmackay/plugins/googleanalytics" />
+
+    <framework src="com.google.android.gms:play-services-analytics:+" />
 
     <proguard-config>
 -keep class * extends java.util.ListResourceBundle {
