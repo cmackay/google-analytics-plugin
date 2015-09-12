@@ -27,6 +27,7 @@ import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.PluginResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -96,6 +97,14 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
 
     } else if ("close".equals(action)) {
       close(rawArgs, callback);
+      return true;
+
+    } else if ("setAppOptOut".equals(action)) {
+      setAppOptOut(rawArgs, callback);
+      return true;
+
+    } else if ("getAppOptOut".equals(action)) {
+      getAppOptOut(callback);
       return true;
     }
 
@@ -232,6 +241,19 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
       map.put(key, value);
     }
     return map;
+  }
+
+  private void setAppOptOut(final String rawArgs, CallbackContext callbackContext) {
+    try {
+      ga.setAppOptOut(new JSONArray(rawArgs).getBoolean(0));
+      callbackContext.success();
+    } catch (JSONException e) {
+      callbackContext.error(e.toString());
+    }
+  }
+
+  private void getAppOptOut(CallbackContext callbackContext) {
+    callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, ga.getAppOptOut()));
   }
 
 }

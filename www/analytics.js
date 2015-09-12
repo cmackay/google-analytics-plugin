@@ -257,7 +257,17 @@ Analytics.prototype = {
       }
       self.sendException(description, fatal, success, error);
     };
-  }
+  },
+
+  setAppOptOut: function (enabled, success, error) {
+    argscheck.checkArgs('*FF', 'analytics.setAppOptOut', arguments);
+    exec(success, error, 'GoogleAnalytics', 'setAppOptOut', [enabled]);
+  },
+
+  getAppOptOut: function (success) {
+    argscheck.checkArgs('fF', 'analytics.getAppOptOut', arguments);
+    exec(success, null, 'GoogleAnalytics', 'getAppOptOut', []);
+  },
 
 };
 
