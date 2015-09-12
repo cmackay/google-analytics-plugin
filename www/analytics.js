@@ -265,7 +265,7 @@ Analytics.prototype = {
   },
 
   getAppOptOut: function (success) {
-    argscheck.checkArgs('fF', 'analytics.getAppOptOut', arguments);
+    argscheck.checkArgs('F', 'analytics.getAppOptOut', arguments);
     exec(success, null, 'GoogleAnalytics', 'getAppOptOut', []);
   },
 

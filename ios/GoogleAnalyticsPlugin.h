@@ -32,5 +32,7 @@
 - (void) set: (CDVInvokedUrlCommand*)command;
 - (void) send: (CDVInvokedUrlCommand*)command;
 - (void) close: (CDVInvokedUrlCommand*)command;
+- (void) getAppOptOut: (CDVInvokedUrlCommand*)command;
+- (void) setAppOptOut: (CDVInvokedUrlCommand*)command;
 
 @end
