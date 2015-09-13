@@ -89,6 +89,18 @@ analytics.setLogLevel(logLevel, success, error);
 //  error       - Function  (optional)
 analytics.sendAppView(screenName, success, error);
 
+// Get app-level opt out flag that will disable Google Analytics across the entire app
+//
+//  success     - Function  (optional) value is returned to callback
+analytics.getAppOptOut(success);
+
+// Set app-level opt out flag that will disable Google Analytics across the entire app
+//
+//  logLevel    - Boolean   (required)
+//  success     - Function  (optional)
+//  error       - Function  (optional)
+analytics.setAppOptOut(logLevel, success, error);
+
 // also supports the ability to send additional paramaters in the request
 // The params argument is an object which can contain additional key and value
 // parameters which will be sent as part of the analytics request
