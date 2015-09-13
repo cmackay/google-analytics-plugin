@@ -9,6 +9,9 @@
       "android"
     ]
   },
+  "scripts": {
+    "docs": "./node_modules/.bin/rimraf README.md && cat prefix.md > README.md && ./node_modules/.bin/jsdoc2md ./www/*.js >> README.md"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cmackay/google-analytics-plugin.git"
@@ -31,5 +34,9 @@
   "bugs": {
     "url": "https://github.com/cmackay/google-analytics-plugin/issues"
   },
-  "homepage": "https://github.com/cmackay/google-analytics-plugin#readme"
+  "homepage": "https://github.com/cmackay/google-analytics-plugin#readme",
+  "devDependencies": {
+    "jsdoc-to-markdown": "^1.1.1",
+    "rimraf": "^2.4.3"
+  }
 }

@@ -1,6 +1,5 @@
 
 /*
- *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -17,7 +16,6 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- *
  */
 
 var argscheck = require('cordova/argscheck'),
@@ -109,27 +107,79 @@ for (key in LogLevel) {
   }
 }
 
-function Analytics() {
-}
+/**
+ * @module
+ */
+module.exports = {
 
-Analytics.prototype = {
-
+  /**
+   * GA Field Types
+   */
   Fields: Fields,
 
+  /**
+   * GA Hit Types
+   */
   HitTypes: HitTypes,
 
+  /**
+   * Log Levels
+   */
   LogLevel: LogLevel,
 
+  /**
+   * Sets the tracking id
+   *
+   * @param {string} trackingId - the trackingId
+   * @param {function} [success] - the success callback
+   * @param {function} [error] - the error callback
+   */
   setTrackingId: function (trackingId, success, error) {
     argscheck.checkArgs('sFF', 'analytics.setTrackingId', arguments);
     exec(success, error, 'GoogleAnalytics', 'setTrackingId', [trackingId]);
   },
 
+  /**
+   * Sets the dispatch Interval
+   *
+   * @param {number} seconds - the interval in seconds
+   * @param {function} [success] - the success callback
+   * @param {function} [error] - the error callback
+   */
   setDispatchInterval: function (seconds, success, error) {
     argscheck.checkArgs('nFF', 'analytics.setDispatchInterval', arguments);
     exec(success, error, 'GoogleAnalytics', 'setDispatchInterval', [seconds]);
   },
 
+  /**
+   * Get app-level opt out flag that will disable Google Analytics
+   *
+   * @param {function} [success] - the success callback (value is passed to callback)
+   */
+  getAppOptOut: function (success) {
+    argscheck.checkArgs('F', 'analytics.getAppOptOut', arguments);
+    exec(success, null, 'GoogleAnalytics', 'getAppOptOut', []);
+  },
+
+  /**
+   * Set app-level opt out flag that will disable Google Analytics
+   *
+   * @param {boolean} [enabled=true] - true for opt out or false to opt in
+   * @param {function} [success] - the success callback
+   * @param {function} [error] - the error callback
+   */
+  setAppOptOut: function (enabled, success, error) {
+    argscheck.checkArgs('*FF', 'analytics.setAppOptOut', arguments);
+    exec(success, error, 'GoogleAnalytics', 'setAppOptOut', [enabled]);
+  },
+
+  /**
+   * Sets the log level
+   *
+   * @param {number} logLevel - the log level (refer to LogLevel for values)
+   * @param {function} [success] - the success callback
+   * @param {function} [error] - the error callback
+   */
   setLogLevel: function (logLevel, success, error) {
     argscheck.checkArgs('nFF', 'analytics.setLogLevel', arguments);
     if (platform.id === 'ios') {
@@ -140,44 +190,109 @@ Analytics.prototype = {
   },
 
   enableAdvertisingIdCollection: function (success, error) {
-       argscheck.checkArgs('FF', 'analytics.enableAdvertisingIdCollection', arguments);
-       exec(success, error, 'GoogleAnalytics', 'setIDFAEnabled', []);
+    argscheck.checkArgs('FF', 'analytics.enableAdvertisingIdCollection', arguments);
+    exec(success, error, 'GoogleAnalytics', 'setIDFAEnabled', []);
   },
 
+  /**
+   * Gets a field value. Returned as argument to success callback
+   *
+   * @param {string} key - the key
+   * @param {function} success - the success callback
+   * @param {function} [error] - the error callback
+   */
   get: function (key, success, error) {
     argscheck.checkArgs('sfF', 'analytics.get', arguments);
     exec(success, error, 'GoogleAnalytics', 'get', [key]);
   },
 
+  /**
+   * Sets a field value
+   *
+   * @param {string} key - the key
+   * @param value - the value
+   * @param {function} [success] - the success callback
+   * @param {function} [error] - the error callback
+   */
   set: function (key, value, success, error) {
     argscheck.checkArgs('s*FF', 'analytics.set', arguments);
     exec(success, error, 'GoogleAnalytics', 'set', [key, value]);
   },
 
-  send: function (map, success, error) {
+  /**
+   * Generates a hit to be sent with the specified params and current field values
+   *
+   * @param {object} params - the params
+   * @param {function} [success] - the success callback
+   * @param {function} [error] - the error callback
+   */
+  send: function (params, success, error) {
     argscheck.checkArgs('oFF', 'analytics.send', arguments);
-    exec(success, error, 'GoogleAnalytics', 'send', [map]);
+    exec(success, error, 'GoogleAnalytics', 'send', [params]);
   },
 
+  /**
+   * Closes the the tracker
+   *
+   * @param {function} [success] - the success callback
+   * @param {function} [error] - the error callback
+   */
   close: function (success, error) {
     argscheck.checkArgs('FF', 'analytics.close', arguments);
     exec(success, error, 'GoogleAnalytics', 'close', []);
   },
 
+  /**
+   * Sets a custom dimension
+   *
+   * @param {number} id - the id
+   * @param {string} [value] - the value
+   * @param {function} [success] - the success callback
+   * @param {function} [error] - the error callback
+   */
   customDimension: function (id, value, success, error) {
     argscheck.checkArgs('n*FF', 'analytics.customDimension', arguments);
     this.set('&cd' + id, value, success, error);
   },
 
+  /**
+   * Sets a custom metric
+   *
+   * @param {number} id - the id
+   * @param {number} [value] - the value
+   * @param {function} [success] - the success callback
+   * @param {function} [error] - the error callback
+   */
   customMetric: function (id, value, success, error) {
     argscheck.checkArgs('n*FF', 'analytics.customMetric', arguments);
     this.set('&cm' + id, value, success, error);
   },
 
+  /**
+   * Sends an event
+   *
+   * @param {string} category - the category
+   * @param {string} action - the action
+   * @param {string} [label=''] - the label
+   * @param {number} [value=0] - the value
+   * @param {function} [success] - the success callback
+   * @param {function} [error] - the error callback
+   */
   sendEvent: function (category, action, label, value, success, error) {
     this.sendEventWithParams(category, action, label, value, {}, success, error);
   },
 
+  /**
+   * Sends an event with additional params
+   *
+   * @param {string} category - the category
+   * @param {string} action - the action
+   * @param {string} [label=''] - the label
+   * @param {number} [value=0] - the value
+   * @param {object} params - the params
+   * @param {function} [success] - the success callback
+   * @param {function} [error] - the error callback
+   */
   sendEventWithParams: function (category, action, label, value, params, success, error) {
     argscheck.checkArgs('ssSNoFF', 'analytics.sendEvent', arguments);
     if (params === undefined || params === null) {
@@ -191,10 +306,25 @@ Analytics.prototype = {
     this.send(params, success, error);
   },
 
+  /**
+   * Sends a screen view
+   *
+   * @param {string} screenName - the screenName
+   * @param {function} [success] - the success callback
+   * @param {function} [error] - the error callback
+   */
   sendAppView: function (screenName, success, error) {
     this.sendAppViewWithParams(screenName, {}, success, error);
   },
 
+/**
+   * Sends a screen view with additional params
+   *
+   * @param {string} screenName - the screenName
+   * @param {object} params - the params
+   * @param {function} [success] - the success callback
+   * @param {function} [error] - the error callback
+   */
   sendAppViewWithParams: function (screenName, params, success, error) {
     argscheck.checkArgs('soFF', 'analytics.sendAppView', arguments);
     if (params === undefined || params === null) {
@@ -205,6 +335,16 @@ Analytics.prototype = {
     this.send(params, success, error);
   },
 
+  /**
+   * Sends a user timing
+   *
+   * @param {string} category - the category
+   * @param {string} variable - the variable
+   * @param {string} label - the label
+   * @param {number} time - the time
+   * @param {function} [success] - the success callback
+   * @param {function} [error] - the error callback
+   */
   sendTiming: function (category, variable, label, time, success, error) {
     argscheck.checkArgs('sssnFF', 'analytics.sendException', arguments);
     var params = {};
@@ -216,6 +356,14 @@ Analytics.prototype = {
     this.send(params, success, error);
   },
 
+  /**
+   * Sends an exception
+   *
+   * @param {string} description - the exception description
+   * @param {boolean} [fatal] - marks the exception as fatal
+   * @param {function} [success] - the success callback
+   * @param {function} [error] - the error callback
+   */
   sendException: function (description, fatal, success, error) {
     argscheck.checkArgs('s*FF', 'analytics.sendException', arguments);
     var params = {};
@@ -225,6 +373,18 @@ Analytics.prototype = {
     this.send(params, success, error);
   },
 
+  /**
+   * Tracks unhandled scripts errors (window.onerror) and then calls sendException.
+   * This function optionally can be passed an object containing a formmatter function
+   * which takes in all the args to window.onError and should return a String with
+   * the formatted error description to be sent to Google Analytics. Also the object
+   * can provide a fatal property which will be passed to sendException (defaults
+   * to true).
+   *
+   * @param {object} [opts] - the options { formatter: Function, fatal: Boolean }
+   * @param {function} [success] - the success callback
+   * @param {function} [error] - the error callback
+   */
   trackUnhandledScriptErrors: function (opts, success, error) {
     argscheck.checkArgs('OFF', 'analytics.trackUnhandledScriptErrors', arguments);
     var self = this,
@@ -257,18 +417,6 @@ Analytics.prototype = {
       }
       self.sendException(description, fatal, success, error);
     };
-  },
-
-  setAppOptOut: function (enabled, success, error) {
-    argscheck.checkArgs('*FF', 'analytics.setAppOptOut', arguments);
-    exec(success, error, 'GoogleAnalytics', 'setAppOptOut', [enabled]);
-  },
-
-  getAppOptOut: function (success) {
-    argscheck.checkArgs('F', 'analytics.getAppOptOut', arguments);
-    exec(success, null, 'GoogleAnalytics', 'getAppOptOut', []);
-  },
+  }
 
 };
-
-module.exports = new Analytics();
