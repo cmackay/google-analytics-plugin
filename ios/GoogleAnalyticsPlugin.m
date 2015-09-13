@@ -125,4 +125,32 @@
   [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
 }
 
+- (void) getAppOptOut: (CDVInvokedUrlCommand*)command
+{
+  CDVPluginResult* result = nil;
+
+  if ([GAI sharedInstance].optOut) {
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:(true)];
+  } else {
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:(false)];
+  }
+
+  [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+}
+
+- (void) setAppOptOut: (CDVInvokedUrlCommand*)command
+{
+  CDVPluginResult* result = nil;
+  BOOL enabled = [[command.arguments objectAtIndex:0] boolValue];
+
+  if (enabled) {
+    [[GAI sharedInstance] setOptOut:YES];
+  } else {
+    [[GAI sharedInstance] setOptOut:NO];
+  }
+  result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+
+  [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+}
+
 @end
