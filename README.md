@@ -82,13 +82,6 @@ analytics.setDispatchInterval(seconds, success, error);
 //  error       - Function  (optional)
 analytics.setLogLevel(logLevel, success, error);
 
-// Turns on IDFA collection to get demographic data in GA
-//
-//  screenName  - String    (required)
-//  success     - Function  (optional)
-//  error       - Function  (optional)
-analytics.sendAppView(screenName, success, error);
-
 // Get app-level opt out flag that will disable Google Analytics across the entire app
 //
 //  success     - Function  (optional) value is returned to callback
@@ -100,6 +93,13 @@ analytics.getAppOptOut(success);
 //  success     - Function  (optional)
 //  error       - Function  (optional)
 analytics.setAppOptOut(logLevel, success, error);
+
+// Sends a screen view
+//
+//  screenName  - String    (required)
+//  success     - Function  (optional)
+//  error       - Function  (optional)
+analytics.sendAppView(screenName, success, error);
 
 // also supports the ability to send additional paramaters in the request
 // The params argument is an object which can contain additional key and value
