@@ -35,7 +35,7 @@ analytics.send(params, successCallback, errorCallback);
 
 ```
 
-The send & set functions provide maximum flexibility and allow you to utilize all of the Google Analytics collection calls. Some helper function are also provided to support some of the more common analytic functions.
+The send & set functions provide maximum flexibility and allow you to utilize all of the Google Analytics collection calls. Some helper functions are also provided to support some of the more common analytic functions.
 
 For more information about measurement protocol refer to the following page:
 
