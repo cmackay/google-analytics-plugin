@@ -80,6 +80,7 @@ var Fields = {
   TRANSACTION_SHIPPING:     '&ts',
   TRANSACTION_TAX:          '&tt',
   USE_SECURE:               'useSecure',
+  USER_ID:                  '&uid',
   VIEWPORT_SIZE:            '&vp'
 };
 
