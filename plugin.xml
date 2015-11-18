@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
   xmlns:android="http://schemas.android.com/apk/res/android"
   id="com.cmackay.plugins.googleanalytics"
-  version="0.1.21">
+  version="0.1.22">
 
   <engines>
     <engine name="cordova" version=">=3.0.0" />
@@ -15,7 +15,7 @@
   <keywords>cordova,analytics</keywords>
   <repo>https://github.com/cmackay/google-analytics-plugin.git</repo>
 
-  
+
 
   <platform name="ios">
     <js-module src="www/analytics.js" name="GoogleAnalytics">
