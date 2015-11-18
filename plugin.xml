@@ -15,11 +15,12 @@
   <keywords>cordova,analytics</keywords>
   <repo>https://github.com/cmackay/google-analytics-plugin.git</repo>
 
-  <js-module src="www/analytics.js" name="GoogleAnalytics">
-    <clobbers target="navigator.analytics" />
-  </js-module>
+  
 
   <platform name="ios">
+    <js-module src="www/analytics.js" name="GoogleAnalytics">
+      <clobbers target="navigator.analytics" />
+    </js-module>
     <config-file target="config.xml" parent="/*">
       <feature name="GoogleAnalytics">
         <param name="ios-package" value="GoogleAnalyticsPlugin" />
@@ -47,6 +48,9 @@
   </platform>
 
   <platform name="android">
+    <js-module src="www/analytics.js" name="GoogleAnalytics">
+      <clobbers target="navigator.analytics" />
+    </js-module>
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="GoogleAnalytics">
         <param name="android-package" value="com.cmackay.plugins.googleanalytics.GoogleAnalyticsPlugin" />
