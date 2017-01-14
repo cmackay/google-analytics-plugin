@@ -33,7 +33,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -41,7 +43,7 @@ import java.util.Iterator;
 public class GoogleAnalyticsPlugin extends CordovaPlugin {
 
   private static GoogleAnalytics ga;
-  private static Tracker tracker;
+  private static List<Tracker> trackers = new ArrayList();
 
   /**
    * Initializes the plugin
@@ -113,9 +115,15 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
 
   private void setTrackingId(String rawArgs, CallbackContext callback) {
     try {
-      tracker = ga.newTracker(new JSONArray(rawArgs).getString(0));
+      trackers = new ArrayList();
+      JSONArray jsonArray = new JSONArray(rawArgs);
+      for (int i = 0; i < jsonArray.length(); i++) {
+        trackers.add(ga.newTracker(new JSONArray(rawArgs).getString(i)));
+      }
       // setup uncaught exception handler
-      tracker.enableExceptionReporting(true);
+      // Currently we always use the first tracker id. Only one tracker may be
+      // used to report uncaught exceptions - developers.google.com/analytics/devguides/collection/android/v4/advanced#multiple-trackers
+      trackers.get(0).enableExceptionReporting(true);
       callback.success();
     } catch (JSONException e) {
       callback.error(e.toString());
@@ -160,7 +168,9 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
 
   private void setIDFAEnabled(String rawArgs, CallbackContext callbackContext) {
     if (hasTracker(callbackContext)) {
-      tracker.enableAdvertisingIdCollection(true);
+      for (Tracker tracker : trackers) {
+        tracker.enableAdvertisingIdCollection(true);
+      }
       callbackContext.success();
     }
   }
@@ -168,8 +178,28 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
   private void get(String rawArgs, CallbackContext callbackContext) {
     if (hasTracker(callbackContext)) {
       try {
-        String value = tracker.get(new JSONArray(rawArgs).getString(0));
-        callbackContext.success(value);
+        String param = new JSONArray(rawArgs).getString(0);
+        if (trackers.size() == 1) {
+          callbackContext.success(trackers.iterator().next().get(param));
+        } else if (trackers.size() > 1) {
+          /*
+           * Returns an array of tracker id and value combinations, e.g.,
+           * [ { "tid1" : "param_value1" }, { "tid2" : "param_value2" }]
+           */
+          JSONArray jsonArray = new JSONArray();
+          for (Tracker tracker : trackers) {
+            String id = tracker.get("&tid");
+            if (id != null) {
+              Object value = tracker.get(param);
+              JSONObject obj = new JSONObject();
+              obj.putOpt(id, value != null ? value : JSONObject.NULL);
+              jsonArray.put(obj);
+            }
+          }
+          callbackContext.success(jsonArray.toString());
+        } else {
+          callbackContext.success();
+        }
       } catch (JSONException e) {
         callbackContext.error(e.toString());
       }
@@ -182,7 +212,9 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
         JSONArray args = new JSONArray(rawArgs);
         String key = args.getString(0);
         String value = args.isNull(1) ? null : args.getString(1);
-        tracker.set(key, value);
+        for (Tracker tracker : trackers) {
+          tracker.set(key, value);
+        }
         callbackContext.success();
       } catch (JSONException e) {
         callbackContext.error(e.toString());
@@ -197,7 +229,9 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
         if (plugin.hasTracker(callbackContext)) {
           try {
             JSONArray args = new JSONArray(rawArgs);
-            plugin.tracker.send(objectToMap(args.getJSONObject(0)));
+            for (Tracker tracker : plugin.trackers) {
+              tracker.send(objectToMap(args.getJSONObject(0)));
+            }
             callbackContext.success();
           } catch (JSONException e) {
             callbackContext.error(e.toString());
@@ -213,7 +247,12 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
         GoogleAnalyticsPlugin plugin = GoogleAnalyticsPlugin.this;
         if (plugin.hasTracker(callbackContext)) {
           plugin.ga.dispatchLocalHits();
-          plugin.tracker = null;
+          Iterator<Tracker> it = plugin.trackers.iterator();
+          while (it.hasNext()) {
+            Tracker tracker = it.next();
+            it.remove();
+            tracker = null;
+          }
           callbackContext.success();
         }
       }
@@ -221,7 +260,7 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
   }
 
   private boolean hasTracker(CallbackContext callbackContext) {
-    if (tracker == null) {
+    if (trackers.isEmpty()) {
       callbackContext.error("Tracker not initialized. Call setTrackingId prior to using tracker.");
       return false;
     }

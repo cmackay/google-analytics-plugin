@@ -144,13 +144,13 @@ module.exports = {
    * Sets multiple tracking ids.
    * This will override any tracking id previously set.
    *
-   * @param {array} trackingId - array of trackingId parameters
+   * @param {array} trackingIds - array of trackingId parameters
    * @param {function} [success] - the success callback
    * @param {function} [error] - the error callback
    */
-  setMultipleTrackingIds: function (trackingId, success, error) {
+  setMultipleTrackingIds: function (trackingIds, success, error) {
     argscheck.checkArgs('aFF', 'analytics.setTrackingId', arguments);
-    exec(success, error, 'GoogleAnalytics', 'setTrackingId', trackingId);
+    exec(success, error, 'GoogleAnalytics', 'setTrackingId', trackingIds);
   },
 
   /**
@@ -212,7 +212,7 @@ module.exports = {
    * Gets a field value. Returned as argument to success callback.
    * If multiple trackers are being used, this returns an array of trackerId and
    * field value objects, e.g.,
-   * [ { "tid1" : "param_value1" }, { "tid2" : "param_value2" }]
+   * [{ "tid1" : "param_value1" }, { "tid2" : "param_value2" }]
    *
    * @param {string} key - the key
    * @param {function} success - the success callback
