@@ -43,7 +43,7 @@ import java.util.Iterator;
 public class GoogleAnalyticsPlugin extends CordovaPlugin {
 
   private static GoogleAnalytics ga;
-  private static List<Tracker> trackers = new ArrayList();
+  private static List<Tracker> trackers = new ArrayList<Tracker>();
 
   /**
    * Initializes the plugin
@@ -115,7 +115,7 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
 
   private void setTrackingId(String rawArgs, CallbackContext callback) {
     try {
-      trackers = new ArrayList();
+      trackers.clear();
       JSONArray jsonArray = new JSONArray(rawArgs);
       for (int i = 0; i < jsonArray.length(); i++) {
         trackers.add(ga.newTracker(new JSONArray(rawArgs).getString(i)));
@@ -247,12 +247,7 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
         GoogleAnalyticsPlugin plugin = GoogleAnalyticsPlugin.this;
         if (plugin.hasTracker(callbackContext)) {
           plugin.ga.dispatchLocalHits();
-          Iterator<Tracker> it = plugin.trackers.iterator();
-          while (it.hasNext()) {
-            Tracker tracker = it.next();
-            it.remove();
-            tracker = null;
-          }
+          plugin.trackers.clear();
           callbackContext.success();
         }
       }
