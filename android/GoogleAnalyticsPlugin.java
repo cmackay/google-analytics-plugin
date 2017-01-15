@@ -184,7 +184,7 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
         } else if (trackers.size() > 1) {
           /*
            * Returns an array of tracker id and value combinations, e.g.,
-           * [ { "tid1" : "param_value1" }, { "tid2" : "param_value2" }]
+           * [{ "tid1" : "param_value1" }, { "tid2" : "param_value2" }]
            */
           JSONArray jsonArray = new JSONArray();
           for (Tracker tracker : trackers) {
@@ -261,7 +261,7 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
 
   private boolean hasTracker(CallbackContext callbackContext) {
     if (trackers.isEmpty()) {
-      callbackContext.error("Tracker not initialized. Call setTrackingId prior to using tracker.");
+      callbackContext.error("Tracker(s) not initialized. Call setTrackingId or setMultipleTrackingIds prior to using tracker.");
       return false;
     }
     return true;

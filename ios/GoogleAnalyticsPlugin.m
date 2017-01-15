@@ -115,7 +115,7 @@
     } else {
         /*
          * Returns an array of tracker id and value combinations, e.g.,
-         * [ { "tid1" : "param_value1" }, { "tid2" : "param_value2" }]
+         * [{ "tid1" : "param_value1" }, { "tid2" : "param_value2" }]
          */
         NSMutableArray *array = [NSMutableArray arrayWithCapacity:[trackers count]];
         for (NSUInteger i = 0; i < [trackers count]; i++) {

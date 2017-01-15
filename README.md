@@ -168,7 +168,7 @@ Gets a field value. Returned as argument to success callback
 If multiple trackers are being used, it returns an array of trackerId and
 field value pairs, e.g.,
 ```json
-[{ "tid1" : "param_value1" }, { "tid2" : "param_value2" }]
+[{ "UA-XXXXX-1" : "field_value1" }, { "UA-XXXXX-2" : "field_value2" }]
 ```
 
 **Kind**: static method of <code>[analytics](#module_analytics)</code>  
