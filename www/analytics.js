@@ -211,7 +211,7 @@ module.exports = {
   /**
    * Gets a field value. Returned as argument to success callback.
    * If multiple trackers are being used, this returns an array of trackerId and
-   * field value objects, e.g.,
+   * field value pairs, e.g.,
    * [{ "tid1" : "param_value1" }, { "tid2" : "param_value2" }]
    *
    * @param {string} key - the key
