@@ -22,20 +22,55 @@
 #import "GAIDictionaryBuilder.h"
 #import "GAIFields.h"
 
+@interface GoogleAnalyticsPlugin()
+
+- (void) _releaseTrackers;
+- (void) _setTrackingIds: (CDVInvokedUrlCommand*)command;
+
+@end
+
 @implementation GoogleAnalyticsPlugin
+
+- (void) _releaseTrackers
+{
+  if (trackers) {
+    for (NSUInteger i = 0; i < [trackers count]; i++) {
+      [[GAI sharedInstance] removeTrackerByName:[[trackers objectAtIndex:i] name]];
+    }
+  }
+  trackers = nil;
+}
+
+- (void) _setTrackingIds: (CDVInvokedUrlCommand*)command
+{
+  [GAI sharedInstance].trackUncaughtExceptions = YES;
+
+  [self _releaseTrackers];
+
+  trackers = [[NSMutableArray alloc] initWithCapacity:[command.arguments count]];
+  for (NSUInteger i = 0; i < [command.arguments count]; i++) {
+    id<GAITracker> tracker = [[GAI sharedInstance] trackerWithTrackingId:[command.arguments objectAtIndex:i]];
+    [trackers addObject:tracker];
+  }
+}
 
 - (void) setTrackingId: (CDVInvokedUrlCommand*)command
 {
   CDVPluginResult* result = nil;
-  NSString* trackingId = [command.arguments objectAtIndex:0];
 
-  [GAI sharedInstance].trackUncaughtExceptions = YES;
+  [self _setTrackingIds:command];
 
-  if (tracker) {
-    [[GAI sharedInstance] removeTrackerByName:[tracker name]];
-  }
+  result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 
-  tracker = [[GAI sharedInstance] trackerWithTrackingId:trackingId];
+  [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+}
+
+- (void) setMultipleTrackingIds: (CDVInvokedUrlCommand*)command
+{
+  CDVPluginResult* result = nil;
+
+  [self _setTrackingIds:command];
+
   result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
 
   [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
@@ -68,12 +103,42 @@
 - (void) get: (CDVInvokedUrlCommand*)command
 {
   CDVPluginResult* result = nil;
-  NSString* key = [command.arguments objectAtIndex:0];
 
-  if (!tracker) {
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"tracker not initialized"];
-  } else {
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[tracker get:key]];
+  @try {
+    NSString* key = [command.arguments objectAtIndex:0];
+
+    if (!trackers) {
+      result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"tracker(s) not initialized"];
+    } else if ([trackers count] == 1) {
+      id<GAITracker> tracker = [trackers objectAtIndex:0];
+      result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[tracker get:key]];
+    } else {
+        /*
+         * Returns an array of tracker id and value combinations, e.g.,
+         * [ { "tid1" : "param_value1" }, { "tid2" : "param_value2" }]
+         */
+        NSMutableArray *array = [NSMutableArray arrayWithCapacity:[trackers count]];
+        for (NSUInteger i = 0; i < [trackers count]; i++) {
+          id<GAITracker> tracker = [trackers objectAtIndex:i];
+          NSString *tid = [tracker get:@"&tid"];
+          NSString *value = [tracker get:key];
+          NSMutableDictionary *dict = [[NSMutableDictionary alloc]init];
+          [dict setValue:value == nil ? @"" : value forKey:tid];
+          [array addObject:dict];
+        }
+
+        NSError *err = nil;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:array options:0 error:&err];
+        if (!jsonData) {
+          // something went wrong with dict - json serialization
+          result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[err localizedDescription]];
+        } else {
+          NSString *serialized = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+          result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:serialized];
+        }
+    }
+  } @catch (NSException *e) {
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[e reason]];
   }
 
   [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
@@ -85,10 +150,12 @@
   NSString* key = [command.arguments objectAtIndex:0];
   NSString* value = [command.arguments objectAtIndex:1];
 
-  if (!tracker) {
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"tracker not initialized"];
+  if (!trackers) {
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"tracker(s) not initialized"];
   } else {
-    [tracker set:key value:value];
+    for (NSUInteger i = 0; i < [trackers count]; i++) {
+      [[trackers objectAtIndex:i] set:key value:value];
+    }
     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
   }
 
@@ -100,10 +167,12 @@
   CDVPluginResult* result = nil;
   NSDictionary* params = [command.arguments objectAtIndex:0];
 
-  if (!tracker) {
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"tracker not initialized"];
+  if (!trackers) {
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"tracker(s) not initialized"];
   } else {
-    [tracker send:params];
+    for (NSUInteger i = 0; i < [trackers count]; i++) {
+      [[trackers objectAtIndex:i] send:params];
+    }
     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
   }
 
@@ -114,11 +183,10 @@
 {
   CDVPluginResult* result = nil;
 
-  if (!tracker) {
-    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"tracker not initialized"];
+  if (!trackers) {
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"tracker(s) not initialized"];
   } else {
-    [[GAI sharedInstance] removeTrackerByName:[tracker name]];
-    tracker = nil;
+    [self _releaseTrackers];
     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
   }
 
