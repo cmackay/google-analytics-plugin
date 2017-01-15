@@ -123,7 +123,7 @@
           NSString *tid = [tracker get:@"&tid"];
           NSString *value = [tracker get:key];
           NSMutableDictionary *dict = [[NSMutableDictionary alloc]init];
-          [dict setValue:value == nil ? @"" : value forKey:tid];
+          [dict setValue:value == nil ? [NSNull null] : value forKey:tid];
           [array addObject:dict];
         }
 
