@@ -110,7 +110,7 @@
   @try {
     NSString* key = [command.arguments objectAtIndex:0];
 
-    if (!trackers) {
+    if (!trackers || ![trackers count]) {
       result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"tracker(s) not initialized"];
     } else if ([trackers count] == 1) {
       id<GAITracker> tracker = [trackers objectAtIndex:0];
@@ -153,7 +153,7 @@
   NSString* key = [command.arguments objectAtIndex:0];
   NSString* value = [command.arguments objectAtIndex:1];
 
-  if (!trackers) {
+  if (!trackers || ![trackers count]) {
     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"tracker(s) not initialized"];
   } else {
     for (NSUInteger i = 0; i < [trackers count]; i++) {
@@ -170,7 +170,7 @@
   CDVPluginResult* result = nil;
   NSDictionary* params = [command.arguments objectAtIndex:0];
 
-  if (!trackers) {
+  if (!trackers || ![trackers count]) {
     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"tracker(s) not initialized"];
   } else {
     for (NSUInteger i = 0; i < [trackers count]; i++) {
@@ -186,7 +186,7 @@
 {
   CDVPluginResult* result = nil;
 
-  if (!trackers) {
+  if (!trackers || ![trackers count]) {
     result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"tracker(s) not initialized"];
   } else {
     [self _releaseTrackers];
