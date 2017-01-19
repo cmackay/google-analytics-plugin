@@ -37,8 +37,8 @@
     for (NSUInteger i = 0; i < [trackers count]; i++) {
       [[GAI sharedInstance] removeTrackerByName:[[trackers objectAtIndex:i] name]];
     }
+    [trackers removeAllObjects];
   }
-  trackers = nil;
 }
 
 - (void) _setTrackingIds: (CDVInvokedUrlCommand*)command
@@ -47,7 +47,10 @@
 
   [self _releaseTrackers];
 
-  trackers = [[NSMutableArray alloc] initWithCapacity:[command.arguments count]];
+  if (!trackers) {
+    trackers = [[NSMutableArray alloc] initWithCapacity:[command.arguments count]];
+  }
+
   for (NSUInteger i = 0; i < [command.arguments count]; i++) {
     id<GAITracker> tracker = [[GAI sharedInstance] trackerWithTrackingId:[command.arguments objectAtIndex:i]];
     [trackers addObject:tracker];
