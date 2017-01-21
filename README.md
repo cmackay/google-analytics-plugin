@@ -16,6 +16,8 @@ var analytics = navigator.analytics;
 
 // set the tracking id
 analytics.setTrackingId('UA-XXXXX-X');
+// ...or set multiple tracking ids
+analytics.setMultipleTrackingIds(['UA-XXXXX-1', 'UA-XXXXX-2']);
 
 analytics.sendAppView('home', successCallback, errorCallback);
 
@@ -55,6 +57,7 @@ cordova plugin add com.cmackay.plugins.googleanalytics
   * [.HitTypes](#module_analytics.HitTypes)
   * [.LogLevel](#module_analytics.LogLevel)
   * [.setTrackingId(trackingId, [success], [error])](#module_analytics.setTrackingId)
+  * [.setMultipleTrackingIds(trackingIds, [success], [error])](#module_analytics.setMultipleTrackingIds)
   * [.setDispatchInterval(seconds, [success], [error])](#module_analytics.setDispatchInterval)
   * [.getAppOptOut([success])](#module_analytics.getAppOptOut)
   * [.setAppOptOut([enabled], [success], [error])](#module_analytics.setAppOptOut)
@@ -90,13 +93,25 @@ Log Levels
 **Kind**: static property of <code>[analytics](#module_analytics)</code>  
 <a name="module_analytics.setTrackingId"></a>
 ### analytics.setTrackingId(trackingId, [success], [error])
-Sets the tracking id
+Sets the tracking id. This will override any id or ids previously set.
 
 **Kind**: static method of <code>[analytics](#module_analytics)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | trackingId | <code>string</code> | the trackingId |
+| [success] | <code>function</code> | the success callback |
+| [error] | <code>function</code> | the error callback |
+
+<a name="module_analytics.setMultipleTrackingIds"></a>
+### analytics.setMultipleTrackingIds(trackingIds, [success], [error])
+Sets multiple tracking ids. This will override any id or ids previously set.
+
+**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| trackingIds | <code>array</code> | the trackingId |
 | [success] | <code>function</code> | the success callback |
 | [error] | <code>function</code> | the error callback |
 
@@ -149,6 +164,12 @@ Sets the log level
 <a name="module_analytics.get"></a>
 ### analytics.get(key, success, [error])
 Gets a field value. Returned as argument to success callback
+
+If multiple trackers are being used, it returns an array of trackerId and
+field value pairs, e.g.,
+```json
+[{ "UA-XXXXX-1" : "field_value1" }, { "UA-XXXXX-2" : "field_value2" }]
+```
 
 **Kind**: static method of <code>[analytics](#module_analytics)</code>  
 
@@ -320,4 +341,3 @@ to true).
 | [opts] | <code>object</code> | the options { formatter: Function, fatal: Boolean } |
 | [success] | <code>function</code> | the success callback |
 | [error] | <code>function</code> | the error callback |
-

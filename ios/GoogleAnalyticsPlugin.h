@@ -22,10 +22,11 @@
 #import "GAI.h"
 
 @interface GoogleAnalyticsPlugin : CDVPlugin {
-  id<GAITracker> tracker;
+  NSMutableArray *trackers;
 }
 
 - (void) setTrackingId: (CDVInvokedUrlCommand*)command;
+- (void) setMultipleTrackingIds: (CDVInvokedUrlCommand*)command;
 - (void) setDispatchInterval: (CDVInvokedUrlCommand*)command;
 - (void) setLogLevel: (CDVInvokedUrlCommand*)command;
 - (void) get: (CDVInvokedUrlCommand*)command;

@@ -141,6 +141,19 @@ module.exports = {
   },
 
   /**
+   * Sets multiple tracking ids.
+   * This will override any tracking id previously set.
+   *
+   * @param {array} trackingIds - array of trackingId parameters
+   * @param {function} [success] - the success callback
+   * @param {function} [error] - the error callback
+   */
+  setMultipleTrackingIds: function (trackingIds, success, error) {
+    argscheck.checkArgs('aFF', 'analytics.setTrackingId', arguments);
+    exec(success, error, 'GoogleAnalytics', 'setTrackingId', trackingIds);
+  },
+
+  /**
    * Sets the dispatch Interval
    *
    * @param {number} seconds - the interval in seconds
@@ -196,7 +209,10 @@ module.exports = {
   },
 
   /**
-   * Gets a field value. Returned as argument to success callback
+   * Gets a field value. Returned as argument to success callback.
+   * If multiple trackers are being used, this returns an array of trackerId and
+   * field value pairs, e.g.,
+   * [{ "UA-XXXXX-1" : "field_value1" }, { "UA-XXXXX-2" : "field_value2" }]
    *
    * @param {string} key - the key
    * @param {function} success - the success callback
