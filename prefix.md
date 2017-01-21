@@ -16,6 +16,8 @@ var analytics = navigator.analytics;
 
 // set the tracking id
 analytics.setTrackingId('UA-XXXXX-X');
+// ...or set multiple tracking ids
+analytics.setMultipleTrackingIds(['UA-XXXXX-1', 'UA-XXXXX-2']);
 
 analytics.sendAppView('home', successCallback, errorCallback);
 

@@ -37,7 +37,7 @@ analytics.send(params, successCallback, errorCallback);
 
 ```
 
-The send & set functions provide maximum flexibility and allow you to utilize all of the Google Analytics collection calls. Some helper function are also provided to support some of the more common analytic functions.
+The send & set functions provide maximum flexibility and allow you to utilize all of the Google Analytics collection calls. Some helper functions are also provided to support some of the more common analytic functions.
 
 For more information about measurement protocol refer to the following page:
 
@@ -50,50 +50,55 @@ cordova plugin add com.cmackay.plugins.googleanalytics
 
 ## API
 <a name="module_analytics"></a>
+
 ## analytics
 
 * [analytics](#module_analytics)
-  * [.Fields](#module_analytics.Fields)
-  * [.HitTypes](#module_analytics.HitTypes)
-  * [.LogLevel](#module_analytics.LogLevel)
-  * [.setTrackingId(trackingId, [success], [error])](#module_analytics.setTrackingId)
-  * [.setMultipleTrackingIds(trackingIds, [success], [error])](#module_analytics.setMultipleTrackingIds)
-  * [.setDispatchInterval(seconds, [success], [error])](#module_analytics.setDispatchInterval)
-  * [.getAppOptOut([success])](#module_analytics.getAppOptOut)
-  * [.setAppOptOut([enabled], [success], [error])](#module_analytics.setAppOptOut)
-  * [.setLogLevel(logLevel, [success], [error])](#module_analytics.setLogLevel)
-  * [.get(key, success, [error])](#module_analytics.get)
-  * [.set(key, value, [success], [error])](#module_analytics.set)
-  * [.send(params, [success], [error])](#module_analytics.send)
-  * [.close([success], [error])](#module_analytics.close)
-  * [.customDimension(id, [value], [success], [error])](#module_analytics.customDimension)
-  * [.customMetric(id, [value], [success], [error])](#module_analytics.customMetric)
-  * [.sendEvent(category, action, [label], [value], [success], [error])](#module_analytics.sendEvent)
-  * [.sendEventWithParams(category, action, [label], [value], params, [success], [error])](#module_analytics.sendEventWithParams)
-  * [.sendAppView(screenName, [success], [error])](#module_analytics.sendAppView)
-  * [.sendAppViewWithParams(screenName, params, [success], [error])](#module_analytics.sendAppViewWithParams)
-  * [.sendTiming(category, variable, label, time, [success], [error])](#module_analytics.sendTiming)
-  * [.sendException(description, [fatal], [success], [error])](#module_analytics.sendException)
-  * [.trackUnhandledScriptErrors([opts], [success], [error])](#module_analytics.trackUnhandledScriptErrors)
+    * [.Fields](#module_analytics.Fields)
+    * [.HitTypes](#module_analytics.HitTypes)
+    * [.LogLevel](#module_analytics.LogLevel)
+    * [.setTrackingId(trackingId, [success], [error])](#module_analytics.setTrackingId)
+    * [.setMultipleTrackingIds(trackingIds, [success], [error])](#module_analytics.setMultipleTrackingIds)
+    * [.setDispatchInterval(seconds, [success], [error])](#module_analytics.setDispatchInterval)
+    * [.getAppOptOut([success])](#module_analytics.getAppOptOut)
+    * [.setAppOptOut([enabled], [success], [error])](#module_analytics.setAppOptOut)
+    * [.setLogLevel(logLevel, [success], [error])](#module_analytics.setLogLevel)
+    * [.get(key, success, [error])](#module_analytics.get)
+    * [.set(key, value, [success], [error])](#module_analytics.set)
+    * [.send(params, [success], [error])](#module_analytics.send)
+    * [.close([success], [error])](#module_analytics.close)
+    * [.customDimension(id, [value], [success], [error])](#module_analytics.customDimension)
+    * [.customMetric(id, [value], [success], [error])](#module_analytics.customMetric)
+    * [.sendEvent(category, action, [label], [value], [success], [error])](#module_analytics.sendEvent)
+    * [.sendEventWithParams(category, action, [label], [value], params, [success], [error])](#module_analytics.sendEventWithParams)
+    * [.sendAppView(screenName, [success], [error])](#module_analytics.sendAppView)
+    * [.sendAppViewWithParams(screenName, params, [success], [error])](#module_analytics.sendAppViewWithParams)
+    * [.sendTiming(category, variable, label, time, [success], [error])](#module_analytics.sendTiming)
+    * [.sendException(description, [fatal], [success], [error])](#module_analytics.sendException)
+    * [.trackUnhandledScriptErrors([opts], [success], [error])](#module_analytics.trackUnhandledScriptErrors)
 
 <a name="module_analytics.Fields"></a>
+
 ### analytics.Fields
 GA Field Types
 
 **Kind**: static property of <code>[analytics](#module_analytics)</code>  
 <a name="module_analytics.HitTypes"></a>
+
 ### analytics.HitTypes
 GA Hit Types
 
 **Kind**: static property of <code>[analytics](#module_analytics)</code>  
 <a name="module_analytics.LogLevel"></a>
+
 ### analytics.LogLevel
 Log Levels
 
 **Kind**: static property of <code>[analytics](#module_analytics)</code>  
 <a name="module_analytics.setTrackingId"></a>
+
 ### analytics.setTrackingId(trackingId, [success], [error])
-Sets the tracking id. This will override any id or ids previously set.
+Sets the tracking id
 
 **Kind**: static method of <code>[analytics](#module_analytics)</code>  
 
@@ -104,18 +109,21 @@ Sets the tracking id. This will override any id or ids previously set.
 | [error] | <code>function</code> | the error callback |
 
 <a name="module_analytics.setMultipleTrackingIds"></a>
+
 ### analytics.setMultipleTrackingIds(trackingIds, [success], [error])
-Sets multiple tracking ids. This will override any id or ids previously set.
+Sets multiple tracking ids.
+This will override any tracking id previously set.
 
 **Kind**: static method of <code>[analytics](#module_analytics)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| trackingIds | <code>array</code> | the trackingId |
+| trackingIds | <code>array</code> | array of trackingId parameters |
 | [success] | <code>function</code> | the success callback |
 | [error] | <code>function</code> | the error callback |
 
 <a name="module_analytics.setDispatchInterval"></a>
+
 ### analytics.setDispatchInterval(seconds, [success], [error])
 Sets the dispatch Interval
 
@@ -128,6 +136,7 @@ Sets the dispatch Interval
 | [error] | <code>function</code> | the error callback |
 
 <a name="module_analytics.getAppOptOut"></a>
+
 ### analytics.getAppOptOut([success])
 Get app-level opt out flag that will disable Google Analytics
 
@@ -138,6 +147,7 @@ Get app-level opt out flag that will disable Google Analytics
 | [success] | <code>function</code> | the success callback (value is passed to callback) |
 
 <a name="module_analytics.setAppOptOut"></a>
+
 ### analytics.setAppOptOut([enabled], [success], [error])
 Set app-level opt out flag that will disable Google Analytics
 
@@ -150,6 +160,7 @@ Set app-level opt out flag that will disable Google Analytics
 | [error] | <code>function</code> |  | the error callback |
 
 <a name="module_analytics.setLogLevel"></a>
+
 ### analytics.setLogLevel(logLevel, [success], [error])
 Sets the log level
 
@@ -162,14 +173,12 @@ Sets the log level
 | [error] | <code>function</code> | the error callback |
 
 <a name="module_analytics.get"></a>
-### analytics.get(key, success, [error])
-Gets a field value. Returned as argument to success callback
 
-If multiple trackers are being used, it returns an array of trackerId and
+### analytics.get(key, success, [error])
+Gets a field value. Returned as argument to success callback.
+If multiple trackers are being used, this returns an array of trackerId and
 field value pairs, e.g.,
-```json
 [{ "UA-XXXXX-1" : "field_value1" }, { "UA-XXXXX-2" : "field_value2" }]
-```
 
 **Kind**: static method of <code>[analytics](#module_analytics)</code>  
 
@@ -180,6 +189,7 @@ field value pairs, e.g.,
 | [error] | <code>function</code> | the error callback |
 
 <a name="module_analytics.set"></a>
+
 ### analytics.set(key, value, [success], [error])
 Sets a field value
 
@@ -193,6 +203,7 @@ Sets a field value
 | [error] | <code>function</code> | the error callback |
 
 <a name="module_analytics.send"></a>
+
 ### analytics.send(params, [success], [error])
 Generates a hit to be sent with the specified params and current field values
 
@@ -205,6 +216,7 @@ Generates a hit to be sent with the specified params and current field values
 | [error] | <code>function</code> | the error callback |
 
 <a name="module_analytics.close"></a>
+
 ### analytics.close([success], [error])
 Closes the the tracker
 
@@ -216,6 +228,7 @@ Closes the the tracker
 | [error] | <code>function</code> | the error callback |
 
 <a name="module_analytics.customDimension"></a>
+
 ### analytics.customDimension(id, [value], [success], [error])
 Sets a custom dimension
 
@@ -229,6 +242,7 @@ Sets a custom dimension
 | [error] | <code>function</code> | the error callback |
 
 <a name="module_analytics.customMetric"></a>
+
 ### analytics.customMetric(id, [value], [success], [error])
 Sets a custom metric
 
@@ -242,6 +256,7 @@ Sets a custom metric
 | [error] | <code>function</code> | the error callback |
 
 <a name="module_analytics.sendEvent"></a>
+
 ### analytics.sendEvent(category, action, [label], [value], [success], [error])
 Sends an event
 
@@ -257,6 +272,7 @@ Sends an event
 | [error] | <code>function</code> |  | the error callback |
 
 <a name="module_analytics.sendEventWithParams"></a>
+
 ### analytics.sendEventWithParams(category, action, [label], [value], params, [success], [error])
 Sends an event with additional params
 
@@ -273,6 +289,7 @@ Sends an event with additional params
 | [error] | <code>function</code> |  | the error callback |
 
 <a name="module_analytics.sendAppView"></a>
+
 ### analytics.sendAppView(screenName, [success], [error])
 Sends a screen view
 
@@ -285,6 +302,7 @@ Sends a screen view
 | [error] | <code>function</code> | the error callback |
 
 <a name="module_analytics.sendAppViewWithParams"></a>
+
 ### analytics.sendAppViewWithParams(screenName, params, [success], [error])
 Sends a screen view with additional params
 
@@ -298,6 +316,7 @@ Sends a screen view with additional params
 | [error] | <code>function</code> | the error callback |
 
 <a name="module_analytics.sendTiming"></a>
+
 ### analytics.sendTiming(category, variable, label, time, [success], [error])
 Sends a user timing
 
@@ -313,6 +332,7 @@ Sends a user timing
 | [error] | <code>function</code> | the error callback |
 
 <a name="module_analytics.sendException"></a>
+
 ### analytics.sendException(description, [fatal], [success], [error])
 Sends an exception
 
@@ -326,6 +346,7 @@ Sends an exception
 | [error] | <code>function</code> | the error callback |
 
 <a name="module_analytics.trackUnhandledScriptErrors"></a>
+
 ### analytics.trackUnhandledScriptErrors([opts], [success], [error])
 Tracks unhandled scripts errors (window.onerror) and then calls sendException.
 This function optionally can be passed an object containing a formmatter function
@@ -341,3 +362,4 @@ to true).
 | [opts] | <code>object</code> | the options { formatter: Function, fatal: Boolean } |
 | [success] | <code>function</code> | the success callback |
 | [error] | <code>function</code> | the error callback |
+
