@@ -79,6 +79,16 @@
   [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
 }
 
+- (void) dispatchHits: (CDVInvokedUrlCommand*)command
+{
+  CDVPluginResult* result = nil;
+
+  [[GAI sharedInstance] dispatch];
+  result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+
+  [self.commandDelegate sendPluginResult:result callbackId:[command callbackId]];
+}
+
 - (void) setDispatchInterval: (CDVInvokedUrlCommand*)command
 {
   CDVPluginResult* result = nil;

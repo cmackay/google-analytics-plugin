@@ -209,6 +209,17 @@ module.exports = {
   },
 
   /**
+   * Manually dispatches hits
+   *
+   * @param {function} [success] - the success callback
+   * @param {function} [error] - the error callback
+   */
+  dispatchHits: function (success, error) {
+    argscheck.checkArgs('FF', 'analytics.dispatchHits', arguments);
+    exec(success, error, 'GoogleAnalytics', 'dispatchHits', []);
+  },
+
+  /**
    * Gets a field value. Returned as argument to success callback.
    * If multiple trackers are being used, this returns an array of trackerId and
    * field value pairs, e.g.,
