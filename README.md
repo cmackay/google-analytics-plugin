@@ -63,6 +63,7 @@ cordova plugin add com.cmackay.plugins.googleanalytics
     * [.getAppOptOut([success])](#module_analytics.getAppOptOut)
     * [.setAppOptOut([enabled], [success], [error])](#module_analytics.setAppOptOut)
     * [.setLogLevel(logLevel, [success], [error])](#module_analytics.setLogLevel)
+    * [.dispatchHits([success], [error])](#module_analytics.dispatchHits)
     * [.get(key, success, [error])](#module_analytics.get)
     * [.set(key, value, [success], [error])](#module_analytics.set)
     * [.send(params, [success], [error])](#module_analytics.send)
@@ -169,6 +170,18 @@ Sets the log level
 | Param | Type | Description |
 | --- | --- | --- |
 | logLevel | <code>number</code> | the log level (refer to LogLevel for values) |
+| [success] | <code>function</code> | the success callback |
+| [error] | <code>function</code> | the error callback |
+
+<a name="module_analytics.dispatchHits"></a>
+
+### analytics.dispatchHits([success], [error])
+Manually dispatches hits
+
+**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
 | [success] | <code>function</code> | the success callback |
 | [error] | <code>function</code> | the error callback |
 

@@ -73,6 +73,10 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
       setTrackingId(rawArgs, callback);
       return true;
 
+    } else if ("dispatchHits".equals(action)) {
+      dispatchHits(rawArgs, callback);
+      return true;
+
     } else if ("setDispatchInterval".equals(action)) {
       setDispatchInterval(rawArgs, callback);
       return true;
@@ -128,6 +132,11 @@ public class GoogleAnalyticsPlugin extends CordovaPlugin {
     } catch (JSONException e) {
       callback.error(e.toString());
     }
+  }
+
+  private void dispatchHits(String rawArgs, CallbackContext callback) {
+    ga.dispatchLocalHits();
+    callback.success();
   }
 
   private void setDispatchInterval(String rawArgs, CallbackContext callback) {

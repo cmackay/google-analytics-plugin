@@ -27,6 +27,7 @@
 
 - (void) setTrackingId: (CDVInvokedUrlCommand*)command;
 - (void) setMultipleTrackingIds: (CDVInvokedUrlCommand*)command;
+- (void) dispatchHits: (CDVInvokedUrlCommand*)command;
 - (void) setDispatchInterval: (CDVInvokedUrlCommand*)command;
 - (void) setLogLevel: (CDVInvokedUrlCommand*)command;
 - (void) get: (CDVInvokedUrlCommand*)command;
