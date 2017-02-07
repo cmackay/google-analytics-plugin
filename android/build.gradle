@@ -1,0 +1,21 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.0'
+        classpath 'com.google.gms:google-services:3.0.0'
+    }
+}
+
+repositories {
+    jcenter()
+    mavenLocal()
+}
+
+dependencies {
+    compile 'com.google.android.gms:play-services-analytics:9.6.1'
+}
+
+apply plugin: com.google.gms.googleservices.GoogleServicesPlugin
