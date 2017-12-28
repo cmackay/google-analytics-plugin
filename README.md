@@ -48,6 +48,13 @@ For more information about measurement protocol refer to the following page:
 cordova plugin add com.cmackay.plugins.googleanalytics
 ```
 
+To use a specific version of Google's `play-services-analytics` library just specify it with the `ANALYTICS_VERSION` variable.
+
+```
+cordova plugin add com.cmackay.plugins.googleanalytics --variable ANALYTICS_VERSION='11.0.1'
+```
+
+
 ## API
 <a name="module_analytics"></a>
 
@@ -83,25 +90,25 @@ cordova plugin add com.cmackay.plugins.googleanalytics
 ### analytics.Fields
 GA Field Types
 
-**Kind**: static property of <code>[analytics](#module_analytics)</code>  
+**Kind**: static property of <code>[analytics](#module_analytics)</code>
 <a name="module_analytics.HitTypes"></a>
 
 ### analytics.HitTypes
 GA Hit Types
 
-**Kind**: static property of <code>[analytics](#module_analytics)</code>  
+**Kind**: static property of <code>[analytics](#module_analytics)</code>
 <a name="module_analytics.LogLevel"></a>
 
 ### analytics.LogLevel
 Log Levels
 
-**Kind**: static property of <code>[analytics](#module_analytics)</code>  
+**Kind**: static property of <code>[analytics](#module_analytics)</code>
 <a name="module_analytics.setTrackingId"></a>
 
 ### analytics.setTrackingId(trackingId, [success], [error])
 Sets the tracking id
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -115,7 +122,7 @@ Sets the tracking id
 Sets multiple tracking ids.
 This will override any tracking id previously set.
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -128,7 +135,7 @@ This will override any tracking id previously set.
 ### analytics.setDispatchInterval(seconds, [success], [error])
 Sets the dispatch Interval
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -141,7 +148,7 @@ Sets the dispatch Interval
 ### analytics.getAppOptOut([success])
 Get app-level opt out flag that will disable Google Analytics
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -152,7 +159,7 @@ Get app-level opt out flag that will disable Google Analytics
 ### analytics.setAppOptOut([enabled], [success], [error])
 Set app-level opt out flag that will disable Google Analytics
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -165,7 +172,7 @@ Set app-level opt out flag that will disable Google Analytics
 ### analytics.setLogLevel(logLevel, [success], [error])
 Sets the log level
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -178,7 +185,7 @@ Sets the log level
 ### analytics.dispatchHits([success], [error])
 Manually dispatches hits
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -193,7 +200,7 @@ If multiple trackers are being used, this returns an array of trackerId and
 field value pairs, e.g.,
 [{ "UA-XXXXX-1" : "field_value1" }, { "UA-XXXXX-2" : "field_value2" }]
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -206,7 +213,7 @@ field value pairs, e.g.,
 ### analytics.set(key, value, [success], [error])
 Sets a field value
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -220,7 +227,7 @@ Sets a field value
 ### analytics.send(params, [success], [error])
 Generates a hit to be sent with the specified params and current field values
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -233,7 +240,7 @@ Generates a hit to be sent with the specified params and current field values
 ### analytics.close([success], [error])
 Closes the the tracker
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -245,7 +252,7 @@ Closes the the tracker
 ### analytics.customDimension(id, [value], [success], [error])
 Sets a custom dimension
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -259,7 +266,7 @@ Sets a custom dimension
 ### analytics.customMetric(id, [value], [success], [error])
 Sets a custom metric
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -273,7 +280,7 @@ Sets a custom metric
 ### analytics.sendEvent(category, action, [label], [value], [success], [error])
 Sends an event
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -289,7 +296,7 @@ Sends an event
 ### analytics.sendEventWithParams(category, action, [label], [value], params, [success], [error])
 Sends an event with additional params
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -306,7 +313,7 @@ Sends an event with additional params
 ### analytics.sendAppView(screenName, [success], [error])
 Sends a screen view
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -319,7 +326,7 @@ Sends a screen view
 ### analytics.sendAppViewWithParams(screenName, params, [success], [error])
 Sends a screen view with additional params
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -333,7 +340,7 @@ Sends a screen view with additional params
 ### analytics.sendTiming(category, variable, label, time, [success], [error])
 Sends a user timing
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -349,7 +356,7 @@ Sends a user timing
 ### analytics.sendException(description, [fatal], [success], [error])
 Sends an exception
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -368,7 +375,7 @@ the formatted error description to be sent to Google Analytics. Also the object
 can provide a fatal property which will be passed to sendException (defaults
 to true).
 
-**Kind**: static method of <code>[analytics](#module_analytics)</code>  
+**Kind**: static method of <code>[analytics](#module_analytics)</code>
 
 | Param | Type | Description |
 | --- | --- | --- |
