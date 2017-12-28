@@ -48,4 +48,10 @@ For more information about measurement protocol refer to the following page:
 cordova plugin add com.cmackay.plugins.googleanalytics
 ```
 
+To use a specific version of Google's `play-services-analytics` library just specify it with the `ANALYTICS_VERSION` variable.
+
+```
+cordova plugin add com.cmackay.plugins.googleanalytics --variable ANALYTICS_VERSION='11.0.1'
+```
+
 ## API
