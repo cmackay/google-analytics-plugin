@@ -238,7 +238,7 @@ Generates a hit to be sent with the specified params and current field values
 <a name="module_analytics.close"></a>
 
 ### analytics.close([success], [error])
-Closes the the tracker
+Closes the tracker
 
 **Kind**: static method of <code>[analytics](#module_analytics)</code>
 
