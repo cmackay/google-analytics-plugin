@@ -260,7 +260,7 @@ module.exports = {
   },
 
   /**
-   * Closes the the tracker
+   * Closes the tracker
    *
    * @param {function} [success] - the success callback
    * @param {function} [error] - the error callback
