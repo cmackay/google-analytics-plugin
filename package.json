@@ -1,6 +1,6 @@
 {
   "name": "com.cmackay.plugins.googleanalytics",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Plugin for Google Analytics Native SDKs (Android, iOS)",
   "cordova": {
     "id": "com.cmackay.plugins.googleanalytics",
